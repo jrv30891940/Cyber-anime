@@ -1658,13 +1658,15 @@ function cargarTrailer() {
   } else {
     // Sin ID en Jikan — buscar el tráiler usando el modo de búsqueda del iframe de YouTube
     // listType=search + list=QUERY incrusta los resultados de búsqueda directamente
-    const query = encodeURIComponent(`${animeActual.title} trailer oficial`);
     cont.innerHTML = `
       <div class="yt-w">
         <iframe
-          src="https://www.youtube.com/embed?listType=search&list=${query}&modestbranding=1&rel=0"
-          allowfullscreen loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          src="" 
+          srcdoc="<html><body style='background:#f0f0f0; display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif;'>
+            <p>Selecciona un video para comenzar</p>
+          </body></html>"
+          width="560" 
+          weight="315">
         </iframe>
       </div>
       <p style="font-size:.55rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:5px">
@@ -2192,7 +2194,10 @@ function cargarRespaldo(event) {
 ════════════════════════════════════════ */
 function extraerYouTubeId(trailer) {
   if (!trailer) return null;
-  return trailer.embed_url;
+  //sacar el ID del embed_url
+  const fuente = trailer.embed_url || '';
+  if (!fuente) return null;
+  return fuente;
 }
 
 /* ════════════════════════════════════════
