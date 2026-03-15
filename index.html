@@ -333,6 +333,29 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 }
 .notes-inp:focus   { border-color:var(--vd); }
 .notes-inp::placeholder { color:#555; }
+/* Texto de nota en modo lectura */
+.notes-text {
+  width:100%; background:#050505; border:1px solid #1a1a1a;
+  color:var(--b); font-family:var(--fb); font-size:.72rem;
+  padding:6px 8px; border-radius:3px; line-height:1.5;
+  min-height:34px; white-space:pre-wrap;
+  word-break:break-word;
+}
+.notes-text.empty { color:#444; font-style:italic; }
+/* Fila de botones de nota */
+.notes-acts { display:flex; gap:6px; margin-top:5px; }
+.btn-note {
+  background:none; border:1px solid #2a2a2a; color:var(--g);
+  font-family:var(--ft); font-size:.5rem; padding:4px 10px;
+  border-radius:3px; cursor:pointer; letter-spacing:1px; transition:all .18s;
+}
+.btn-note:hover { border-color:var(--g); color:var(--b); }
+.btn-note.save  { border-color:var(--vd); color:var(--v); }
+.btn-note.save:hover { background:var(--vd); border-color:var(--v); }
+/* Input de fecha de solo lectura (terminado) */
+.date-inp[readonly] {
+  color:var(--g); border-color:#1a1a1a; cursor:default; opacity:.7;
+}
 
 /* ── TOP BANNER ────────────────────────────────── */
 .top-banner {
@@ -410,16 +433,19 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 }
 
 /* ── ESTRELLAS ─────────────────────────────────── */
-.stars { display:flex; align-items:center; gap:1px; margin-bottom:6px; flex-wrap:wrap; }
+.stars { display:flex; align-items:center; gap:2px; margin-bottom:8px; flex-wrap:wrap; }
 .star {
   background:none; border:none; cursor:pointer;
-  font-size:1rem; padding:0 1px; color:#333;
-  transition:color .1s,transform .1s; line-height:1;
+  font-size:1.1rem; padding:0 1px; color:#555;   /* Antes #333 — casi invisible */
+  transition:color .1s, transform .12s, text-shadow .1s; line-height:1;
 }
-.star.on { color:#ffd700; }
-.star:hover { transform:scale(1.2); }
-.s-lbl { font-family:var(--ft); font-size:.62rem; color:var(--g); margin-left:5px; letter-spacing:1px; }
-.s-lbl.rated { color:var(--v); }
+.star.on {
+  color:#ffd700;
+  text-shadow: 0 0 8px rgba(255,215,0,.6);        /* Brillo dorado en las activas */
+}
+.star:hover { color:#ffd700; transform:scale(1.25); text-shadow:0 0 10px rgba(255,215,0,.5); }
+.s-lbl { font-family:var(--ft); font-size:.62rem; color:var(--g); margin-left:6px; letter-spacing:1px; }
+.s-lbl.rated { color:var(--v); text-shadow:0 0 5px var(--vg); }
 
 /* ── STATS ─────────────────────────────────────── */
 .stats-box {
@@ -564,7 +590,341 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   75%{clip-path:inset(70% 0 10% 0);transform:translate(-1px)}
 }
 
-/* ── FOOTER ─────────────────────────────────────── */
+/* ── FILTRO POR GÉNERO ─────────────────────────── */
+.genre-filter-wrap {
+  margin-bottom:14px;
+}
+.genre-filter-label {
+  font-family:var(--ft); font-size:.55rem; letter-spacing:3px;
+  color:var(--g); margin-bottom:8px;
+}
+.genre-tags {
+  display:flex; gap:6px; flex-wrap:wrap;
+}
+.gtag {
+  background:none; border:1px solid #222; color:#888;
+  font-family:var(--fb); font-size:.65rem; padding:5px 11px;
+  border-radius:20px; cursor:pointer; transition:all .18s;
+  white-space:nowrap; letter-spacing:.5px;
+}
+.gtag:hover { border-color:var(--g); color:var(--b); }
+.gtag.active {
+  background:rgba(57,255,20,.08); border-color:var(--v);
+  color:var(--v); box-shadow:0 0 8px var(--vg);
+}
+.gtag-count {
+  background:var(--vd); color:var(--v);
+  border-radius:10px; padding:1px 5px;
+  font-size:.55rem; margin-left:4px;
+}
+.list-search-wrap {
+  position:relative; margin-bottom:14px;
+}
+.list-search-inp {
+  width:100%; background:var(--nc); border:1px solid var(--nb);
+  border-radius:4px; padding:10px 36px 10px 13px;
+  color:var(--b); font-family:var(--fb); font-size:.78rem;
+  outline:none; transition:border-color .2s, box-shadow .2s;
+}
+.list-search-inp:focus { border-color:var(--vd); box-shadow:0 0 8px var(--vg); }
+.list-search-inp::placeholder { color:var(--g); }
+.list-search-ico {
+  position:absolute; right:11px; top:50%;
+  transform:translateY(-50%);
+  font-size:.85rem; color:var(--g); pointer-events:none;
+}
+.list-search-count {
+  font-size:.65rem; color:var(--g); margin-bottom:10px;
+  letter-spacing:1px;
+}
+.list-search-count strong { color:var(--v); }
+
+/* ══════════════════════════════════════════
+   WRAPPED — MODO HISTORIAS ANIMADAS
+   Estilo Spotify Wrapped / Instagram Stories
+══════════════════════════════════════════ */
+
+/* Fondo bloqueante a pantalla completa */
+.wrapped-bg {
+  display:none; position:fixed; inset:0;
+  background:#000; z-index:500;
+  touch-action:none;
+}
+.wrapped-bg.open { display:flex; flex-direction:column; align-items:center; }
+
+/* ── BARRA DE PROGRESO SUPERIOR (stories) ── */
+.w-progress-bar {
+  position:absolute; top:0; left:0; right:0;
+  display:flex; gap:4px; padding:10px 12px 0; z-index:20;
+}
+.w-prog-seg {
+  flex:1; height:3px; background:rgba(255,255,255,.25); border-radius:2px; overflow:hidden;
+}
+.w-prog-fill {
+  height:100%; width:0%; border-radius:2px;
+  background:var(--v); box-shadow:0 0 6px var(--v);
+}
+/* Cuando se activa, llena la barra en el tiempo del slide */
+.w-prog-fill.playing { animation:prog-run var(--dur,6s) linear forwards; }
+.w-prog-fill.done    { width:100%; }
+@keyframes prog-run { from{width:0%} to{width:100%} }
+
+/* ── SLIDE FULL SCREEN ── */
+.w-story {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  overflow:hidden;
+  opacity:0; pointer-events:none;
+  transition:opacity .35s ease;
+}
+.w-story.active {
+  opacity:1; pointer-events:auto;
+}
+
+/* Fondo dinámico de cada slide */
+.w-story-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  filter:blur(20px) brightness(.2) saturate(1.6);
+  transform:scale(1.12);
+}
+/* Overlay degradado sobre el fondo */
+.w-story-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.3) 0%, rgba(0,0,0,.55) 50%, rgba(0,0,0,.85) 100%);
+}
+/* Scanlines encima de todo */
+.w-story-scan {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.18) 3px,rgba(0,0,0,.18) 4px);
+}
+/* Borde neón */
+.w-story::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(to right,transparent,var(--v),transparent);
+  box-shadow:0 0 20px var(--v); z-index:10;
+}
+
+/* Contenido centrado dentro del slide */
+.w-story-content {
+  position:relative; z-index:5;
+  width:100%; max-width:380px;
+  padding:0 28px;
+  display:flex; flex-direction:column;
+  align-items:center; gap:0;
+}
+
+/* ── ANIMACIONES DE ENTRADA por elemento ── */
+.w-anim {
+  opacity:0; transform:translateY(28px);
+}
+.w-story.active .w-anim { animation:w-in .55s cubic-bezier(.22,1,.36,1) forwards; }
+.w-story.active .w-anim:nth-child(1) { animation-delay:.05s; }
+.w-story.active .w-anim:nth-child(2) { animation-delay:.2s;  }
+.w-story.active .w-anim:nth-child(3) { animation-delay:.38s; }
+.w-story.active .w-anim:nth-child(4) { animation-delay:.55s; }
+.w-story.active .w-anim:nth-child(5) { animation-delay:.72s; }
+.w-story.active .w-anim:nth-child(6) { animation-delay:.88s; }
+@keyframes w-in {
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* Variante: número contador con scale */
+.w-anim-pop {
+  opacity:0; transform:scale(.5);
+}
+.w-story.active .w-anim-pop {
+  animation:w-pop .7s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation-delay:.15s;
+}
+@keyframes w-pop { to { opacity:1; transform:scale(1); } }
+
+/* Variante: aparece desde la derecha */
+.w-anim-r {
+  opacity:0; transform:translateX(40px);
+}
+.w-story.active .w-anim-r { animation:w-in-r .5s cubic-bezier(.22,1,.36,1) forwards; }
+.w-story.active .w-anim-r:nth-child(1){animation-delay:.1s}
+.w-story.active .w-anim-r:nth-child(2){animation-delay:.25s}
+.w-story.active .w-anim-r:nth-child(3){animation-delay:.4s}
+.w-story.active .w-anim-r:nth-child(4){animation-delay:.55s}
+.w-story.active .w-anim-r:nth-child(5){animation-delay:.7s}
+.w-story.active .w-anim-r:nth-child(6){animation-delay:.85s}
+@keyframes w-in-r { to { opacity:1; transform:translateX(0); } }
+
+/* ── TIPOGRAFÍAS DEL WRAPPED ── */
+.w-eyebrow {
+  font-family:var(--ft); font-size:.52rem; letter-spacing:5px;
+  color:var(--g); text-transform:uppercase; margin-bottom:10px; text-align:center;
+}
+.w-big-num {
+  font-family:var(--ft); font-weight:900;
+  font-size:clamp(5rem,22vw,7rem); line-height:.85;
+  color:var(--v); text-shadow:0 0 40px var(--v), 0 0 100px var(--vg);
+  text-align:center;
+}
+.w-big-lbl {
+  font-family:var(--ft); font-size:.7rem; letter-spacing:6px;
+  color:var(--b); opacity:.8; margin-top:10px; text-align:center;
+}
+.w-title-lg {
+  font-family:var(--ft); font-size:clamp(1.1rem,5vw,1.5rem);
+  color:var(--v); text-shadow:0 0 16px var(--vg);
+  text-align:center; line-height:1.2; margin:4px 0;
+}
+.w-subtitle {
+  font-size:.72rem; color:#aaa; text-align:center;
+  line-height:1.7; margin-top:8px;
+}
+
+/* ── CAJA GLASSMORPHISM ── */
+.w-glass {
+  background:rgba(0,0,0,.5); backdrop-filter:blur(8px);
+  border:1px solid rgba(57,255,20,.2); border-radius:10px;
+  padding:18px; width:100%; margin:10px 0;
+}
+
+/* ── STATS 2×2 ── */
+.w-stats4 {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; margin-top:10px;
+}
+.w-s4box {
+  background:rgba(0,0,0,.55); border:1px solid rgba(57,255,20,.18);
+  border-radius:8px; padding:14px 10px; text-align:center;
+  backdrop-filter:blur(6px);
+}
+.w-s4n { font-family:var(--ft); font-size:1.8rem; color:var(--v); text-shadow:0 0 14px var(--vg); line-height:1; }
+.w-s4l { font-size:.52rem; color:var(--g); letter-spacing:2px; margin-top:5px; }
+
+/* ── PERSONALIDAD ── */
+.w-persona-chip {
+  background:rgba(57,255,20,.08); border:1px solid rgba(57,255,20,.3);
+  border-radius:30px; padding:8px 20px; margin-bottom:12px;
+  font-family:var(--ft); font-size:.5rem; letter-spacing:4px; color:var(--g);
+  display:inline-block;
+}
+
+/* ── TOP 3 PORTADAS ── */
+.w-podio {
+  display:flex; align-items:flex-end; justify-content:center;
+  gap:10px; width:100%; margin-top:8px;
+}
+.w-podio-item { display:flex; flex-direction:column; align-items:center; position:relative; }
+.w-podio-item.first { order:2; }
+.w-podio-item.second{ order:1; }
+.w-podio-item.third { order:3; }
+.w-podio-img {
+  border-radius:6px; object-fit:cover;
+  border:2px solid rgba(57,255,20,.4);
+  filter:saturate(.85) contrast(1.1);
+  box-shadow:0 4px 20px rgba(0,0,0,.6);
+}
+.w-podio-item.first  .w-podio-img { width:110px; height:160px; border-color:#ffd700; box-shadow:0 0 20px rgba(255,215,0,.35); }
+.w-podio-item.second .w-podio-img { width:85px;  height:124px; border-color:#c0c0c0; }
+.w-podio-item.third  .w-podio-img { width:85px;  height:124px; border-color:#cd7f32; }
+.w-podio-medal {
+  font-family:var(--ft); font-size:.6rem; font-weight:900;
+  padding:3px 8px; border-radius:4px; margin-bottom:5px;
+  color:#000;
+}
+.w-podio-item.first  .w-podio-medal { background:#ffd700; font-size:.7rem; }
+.w-podio-item.second .w-podio-medal { background:#c0c0c0; }
+.w-podio-item.third  .w-podio-medal { background:#cd7f32; }
+.w-podio-score {
+  font-family:var(--ft); font-size:.6rem; color:#ffd700;
+  margin-top:4px;
+}
+.w-podio-name {
+  font-size:.56rem; color:var(--b); margin-top:3px; text-align:center;
+  max-width:90px; line-height:1.3;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* ── GÉNEROS ── */
+.w-genres-list { width:100%; }
+.w-gitem {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:12px;
+}
+.w-gname { font-size:.72rem; color:var(--b); min-width:100px; }
+.w-gtrack { flex:1; background:rgba(255,255,255,.07); border-radius:3px; height:7px; overflow:hidden; }
+.w-gfill  {
+  height:100%; border-radius:3px; width:0%;
+  background:linear-gradient(to right,var(--vd),var(--v));
+  box-shadow:0 0 8px var(--vg);
+}
+/* Animación de las barras al entrar */
+.w-story.active .w-gfill { animation:bar-grow .9s cubic-bezier(.22,1,.36,1) forwards; }
+.w-story.active .w-gitem:nth-child(1) .w-gfill { animation-delay:.3s;  }
+.w-story.active .w-gitem:nth-child(2) .w-gfill { animation-delay:.45s; }
+.w-story.active .w-gitem:nth-child(3) .w-gfill { animation-delay:.6s;  }
+.w-story.active .w-gitem:nth-child(4) .w-gfill { animation-delay:.75s; }
+.w-story.active .w-gitem:nth-child(5) .w-gfill { animation-delay:.9s;  }
+.w-story.active .w-gitem:nth-child(6) .w-gfill { animation-delay:1.05s;}
+@keyframes bar-grow { from{width:0%} to{width:var(--target-w,100%)} }
+.w-gcnt { font-family:var(--ft); font-size:.6rem; color:var(--v); min-width:18px; text-align:right; }
+
+/* ── SLIDE FINAL ── */
+.w-final-logo {
+  font-family:var(--ft); font-weight:900; font-size:2rem;
+  color:var(--v); text-shadow:0 0 30px var(--v), 0 0 80px var(--vg);
+  letter-spacing:2px; text-align:center; margin-bottom:6px;
+}
+.w-final-year {
+  font-family:var(--ft); font-size:4rem; font-weight:900;
+  color:#fff; text-align:center; line-height:1;
+  opacity:.08; position:absolute; top:50%; transform:translateY(-50%);
+  letter-spacing:-4px; pointer-events:none; z-index:0;
+}
+.w-firma-row {
+  display:flex; align-items:center; gap:8px; justify-content:center;
+  margin-top:16px;
+}
+.w-firma-txt { font-family:var(--ft); font-size:.52rem; letter-spacing:3px; color:var(--g); }
+
+/* ── ZONAS DE TAP (izq/der para avanzar/retroceder) ── */
+.w-tap-prev, .w-tap-next {
+  position:absolute; top:0; bottom:0; width:40%; z-index:15;
+  cursor:pointer;
+}
+.w-tap-prev { left:0; }
+.w-tap-next { right:0; }
+
+/* ── BOTÓN CERRAR flotante ── */
+.w-close-btn {
+  position:absolute; top:18px; right:14px; z-index:25;
+  background:rgba(0,0,0,.6); border:1px solid #333; color:var(--g);
+  font-family:var(--fb); font-size:.7rem; padding:6px 12px;
+  border-radius:4px; cursor:pointer; transition:all .2s;
+  backdrop-filter:blur(4px);
+}
+.w-close-btn:hover { border-color:var(--b); color:var(--b); }
+
+/* ── BARRA DE ACCIONES INFERIOR ── */
+.w-actions-bar {
+  position:absolute; bottom:0; left:0; right:0; z-index:20;
+  padding:10px 16px 14px;
+  background:linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 100%);
+  display:flex; gap:8px; justify-content:center;
+}
+
+/* Botón wrapped en stats */
+.btn-wrapped {
+  grid-column:1/-1;
+  background:linear-gradient(135deg,#001500,#003000);
+  border:1px solid var(--v); color:var(--v);
+  font-family:var(--ft); font-size:.62rem; letter-spacing:2px;
+  padding:12px; border-radius:4px; cursor:pointer;
+  transition:all .2s; text-align:center; position:relative; overflow:hidden;
+  text-shadow:0 0 6px var(--vg); box-shadow:0 0 12px var(--vg);
+}
+.btn-wrapped:hover { background:var(--v); color:var(--n); text-shadow:none; }
+.btn-wrapped::before {
+  content:''; position:absolute; left:0; right:0; height:100%;
+  background:linear-gradient(transparent,rgba(57,255,20,.1),transparent);
+  animation:scan 2s linear infinite; top:100%;
+}
 .footer {
   text-align:center; padding:28px 16px 22px;
   border-top:1px solid var(--nb);
@@ -680,6 +1040,13 @@ main { max-width:900px; margin:0 auto; padding:14px; }
       <button class="ltab" data-cat="viendo">VIENDO <span class="lcnt" id="c-v">0</span></button>
       <button class="ltab" data-cat="terminado">TERMINADO <span class="lcnt" id="c-t">0</span></button>
     </div>
+
+    <!-- Filtro por género/tipo — se construye dinámicamente con JS -->
+    <div id="genreFilterWrap" class="genre-filter-wrap" style="display:none">
+      <div class="genre-filter-label">▸ FILTRAR POR GÉNERO / TIPO</div>
+      <div id="genreTags" class="genre-tags"></div>
+    </div>
+
     <h2 class="sec-t">MIS ANIMES</h2>
 
     <!-- Panel de respaldo JSON -->
@@ -687,9 +1054,27 @@ main { max-width:900px; margin:0 auto; padding:14px; }
       <span class="backup-label">▸ RESPALDO DE DATOS</span>
       <button class="btn-backup" onclick="guardarRespaldo()">⬇ GUARDAR RESPALDO</button>
       <button class="btn-backup btn-load" onclick="document.getElementById('fileInput').click()">⬆ CARGAR RESPALDO</button>
-      <!-- Input oculto para seleccionar el archivo JSON -->
       <input id="fileInput" type="file" accept=".json" style="display:none" onchange="cargarRespaldo(event)">
     </div>
+
+    <!-- Botón de prueba del Wrapped (visible siempre para testear) -->
+    <div style="margin-bottom:14px">
+      <button class="btn-wrapped" onclick="abrirWrapped()" style="width:100%">
+        🎄 PROBAR WRAPPED — VISTA PREVIA
+      </button>
+      <p style="font-size:.6rem;color:var(--g);text-align:center;margin-top:6px;letter-spacing:1px">
+        El botón real solo aparece del 25 al 31 de diciembre
+      </p>
+    </div>
+
+    <!-- Buscador dentro de Mi Lista -->
+    <div class="list-search-wrap">
+      <input id="listSearch" class="list-search-inp" type="text"
+        placeholder="🔍  Buscar en tu lista..." autocomplete="off"
+        oninput="filtrarLista(this.value)">
+      <span class="list-search-ico">⌨</span>
+    </div>
+    <p id="listSearchCount" class="list-search-count"></p>
 
     <div id="listCont"></div>
   </section>
@@ -702,6 +1087,124 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   <div class="footer-sub">© 2026 · THEBRODERS · ALL RIGHTS RESERVED</div>
   <div class="footer-line"></div>
 </footer>
+
+<!-- WRAPPED — MODO HISTORIAS -->
+<div id="wrappedBg" class="wrapped-bg">
+
+  <!-- Barra de progreso tipo stories -->
+  <div class="w-progress-bar" id="wProgressBar"></div>
+
+  <!-- Botón cerrar -->
+  <button class="w-close-btn" onclick="cerrarWrapped()">✕</button>
+
+  <!-- Zonas de tap para navegar -->
+  <div class="w-tap-prev" onclick="wPrev()"></div>
+  <div class="w-tap-next" onclick="wNext()"></div>
+
+  <!-- ═══ SLIDE 1: INTRO ═══ -->
+  <div class="w-story" id="wSlide0">
+    <div class="w-story-bg" id="wBg0"></div>
+    <div class="w-story-overlay"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content">
+      <div class="w-anim w-eyebrow">CYBER//ANIME · WRAPPED</div>
+      <div class="w-anim w-big-num" id="wS0Año">2025</div>
+      <div class="w-anim w-big-lbl">FUE UN GRAN AÑO</div>
+      <div class="w-anim" style="margin-top:24px">
+        <div class="w-glass" style="text-align:center">
+          <div style="font-family:var(--ft);font-size:.55rem;letter-spacing:4px;color:var(--g);margin-bottom:8px">EN RESUMEN COMPLETASTE</div>
+          <div style="font-family:var(--ft);font-size:3rem;color:var(--v);text-shadow:0 0 20px var(--v);line-height:1" id="wS0Total">0</div>
+          <div style="font-family:var(--ft);font-size:.6rem;letter-spacing:4px;color:var(--b);opacity:.7;margin-top:4px">ANIMES ESTE AÑO</div>
+        </div>
+      </div>
+      <div class="w-anim w-subtitle" style="margin-top:12px;font-size:.65rem;color:var(--g)">
+        Toca la derecha para continuar →
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 2: TIEMPO INVERTIDO ═══ -->
+  <div class="w-story" id="wSlide1">
+    <div class="w-story-bg" id="wBg1"></div>
+    <div class="w-story-overlay"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content">
+      <div class="w-anim w-eyebrow">TU TIEMPO</div>
+      <div class="w-anim w-big-num" id="wS1Hrs">0</div>
+      <div class="w-anim w-big-lbl">HORAS DE ANIME</div>
+      <div class="w-anim w-subtitle" id="wS1Sub">Eso equivale a 0 días completos</div>
+      <div class="w-anim w-stats4" style="margin-top:20px" id="wS1Stats"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 3: PERSONALIDAD OTAKU ═══ -->
+  <div class="w-story" id="wSlide2">
+    <div class="w-story-bg" id="wBg2"></div>
+    <div class="w-story-overlay"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content" style="text-align:center">
+      <div class="w-anim w-eyebrow">TU PERSONALIDAD OTAKU</div>
+      <div class="w-anim w-persona-chip" id="wS2Chip">ANALIZANDO...</div>
+      <div class="w-anim-pop w-title-lg" id="wS2Tipo">—</div>
+      <div class="w-anim w-subtitle" id="wS2Desc" style="margin-top:16px">—</div>
+      <div class="w-anim w-glass" style="margin-top:20px;text-align:left">
+        <div style="font-family:var(--ft);font-size:.52rem;letter-spacing:3px;color:var(--g);margin-bottom:8px">TU GÉNERO FAVORITO</div>
+        <div style="font-family:var(--ft);font-size:1.1rem;color:var(--v);text-shadow:0 0 12px var(--vg)" id="wS2Genre">—</div>
+        <div style="font-size:.68rem;color:#888;margin-top:4px" id="wS2GenreCnt">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 4: TOP 3 ANIMES ═══ -->
+  <div class="w-story" id="wSlide3">
+    <div class="w-story-bg" id="wBg3"></div>
+    <div class="w-story-overlay"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content">
+      <div class="w-anim w-eyebrow">TUS FAVORITOS DEL AÑO</div>
+      <div class="w-anim" style="font-family:var(--ft);font-size:1rem;color:var(--v);text-shadow:0 0 14px var(--vg);margin-bottom:16px">TOP 3 ANIMES</div>
+      <div class="w-podio" id="wS3Podio"></div>
+      <div id="wS3NoCal" style="display:none;font-size:.7rem;color:var(--g);text-align:center;padding:20px 0">
+        Califica tus animes terminados<br>para ver tu top aquí.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 5: GÉNEROS ═══ -->
+  <div class="w-story" id="wSlide4">
+    <div class="w-story-bg" id="wBg4"></div>
+    <div class="w-story-overlay"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content">
+      <div class="w-anim w-eyebrow">LO QUE MÁS VISTE</div>
+      <div class="w-anim" style="font-family:var(--ft);font-size:1rem;color:var(--v);text-shadow:0 0 14px var(--vg);margin-bottom:20px">TUS GÉNEROS</div>
+      <div class="w-genres-list" id="wS4Genres"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 6: CIERRE ═══ -->
+  <div class="w-story" id="wSlide5">
+    <div class="w-story-bg" id="wBg5"></div>
+    <div class="w-story-overlay" style="background:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.8))"></div>
+    <div class="w-story-scan"></div>
+    <div class="w-story-content" style="text-align:center;justify-content:center;gap:0">
+      <div class="w-final-year" id="wFinalYearBg">2025</div>
+      <div class="w-anim w-final-logo">CYBER//ANIME</div>
+      <div class="w-anim" style="font-family:var(--ft);font-size:.55rem;letter-spacing:5px;color:var(--g);margin:6px 0 24px">WRAPPED</div>
+      <div class="w-anim w-title-lg" id="wS5Main" style="font-size:1.1rem">—</div>
+      <div class="w-anim w-subtitle" id="wS5Sub">—</div>
+      <div class="w-anim w-firma-row" style="margin-top:28px">
+        <span class="w-firma-txt" id="wS5Firma">THEBRODERS · 2025</span>
+      </div>
+    </div>
+    <!-- Botones en el último slide -->
+    <div class="w-actions-bar">
+      <button class="btn-n" style="font-size:.62rem;padding:10px 18px" onclick="descargarWrapped()">⬇ GUARDAR</button>
+      <button class="btn-close" onclick="cerrarWrapped()">[ CERRAR ]</button>
+    </div>
+  </div>
+
+</div>
 <div id="modalBg" class="modal-bg">
   <div class="modal">
     <div class="m-img-w">
@@ -751,6 +1254,7 @@ const TZ_LOCAL = Intl.DateTimeFormat().resolvedOptions().timeZone;
 ════════════════════════════════════════ */
 let animeActual   = null;
 let catActiva     = 'all';
+let genreActivo   = '';   // Género/tipo activo en el filtro de lista
 let diaActivo     = new Date().getDay();
 let cacheDias     = {};
 let topCargado    = false;
@@ -768,7 +1272,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(id).classList.add('active');
-    if (id === 's-list') { renderLista(); renderStats(); }
+    if (id === 's-list') { renderLista(); renderStats(); buildGenreFilter(); }
     if (id === 's-top' && !topCargado) cargarTop();
   });
 });
@@ -778,7 +1282,9 @@ document.querySelectorAll('.ltab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.ltab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    catActiva = btn.dataset.cat;
+    catActiva    = btn.dataset.cat;
+    genreActivo  = '';           // Resetear filtro de género al cambiar categoría
+    buildGenreFilter();
     renderLista();
   });
 });
@@ -1187,13 +1693,20 @@ function addLista(cat) {
   const idx   = lista.findIndex(x => x.id === animeActual.id);
   if (idx === -1) {
     lista.push({
-      id: animeActual.id, title: animeActual.title,
-      image: animeActual.image, score: animeActual.score,
-      type: animeActual.type, episodes: animeActual.episodes, categoria: cat
+      id:       animeActual.id,
+      title:    animeActual.title,
+      image:    animeActual.image,
+      score:    animeActual.score,
+      type:     animeActual.type,
+      episodes: animeActual.episodes,
+      genres:   animeActual.genres,   // ← guardar géneros para el filtro
+      categoria: cat
     });
     toast(`${animeActual.title.substring(0,22)}... → ${cat.toUpperCase()}`);
   } else {
     lista[idx].categoria = cat;
+    // Actualizar géneros si no los tenía (animes agregados antes de este cambio)
+    if (!lista[idx].genres && animeActual.genres) lista[idx].genres = animeActual.genres;
     toast(`Categoría → ${cat.toUpperCase()}`);
   }
   saveLista(lista);
@@ -1252,12 +1765,34 @@ function refreshBtn(id, inL) {
 
 function cambiarCat(id, cat) {
   const l = miLista(), i = l.findIndex(x => x.id === id);
-  if (i !== -1) { l[i].categoria = cat; saveLista(l); actualizarContadores(); toast(`→ ${cat.toUpperCase()}`); }
+  if (i === -1) return;
+
+  // Un anime terminado no puede retroceder de categoría
+  if (l[i].categoria === 'terminado' && (cat === 'porver' || cat === 'viendo')) {
+    toast('⚠ Un anime terminado no puede retroceder de categoría.');
+    renderLista(); // Restaurar el select visualmente
+    return;
+  }
+
+  // Si pasa a viendo por primera vez, guardar fecha de inicio automáticamente
+  if (cat === 'viendo' && !l[i].fechaInicio) {
+    l[i].fechaInicio = new Date().toISOString().split('T')[0];
+  }
+
+  l[i].categoria = cat;
+  saveLista(l);
+  renderLista();
+  actualizarContadores();
+  renderStats();
+  toast(`→ ${cat.toUpperCase()}`);
 }
 
 function quitarAnime(id) {
   saveLista(miLista().filter(x => x.id !== id));
-  renderLista(); actualizarContadores(); toast('Eliminado de tu lista');
+  renderLista();
+  actualizarContadores();
+  renderStats();   // ← Recalcula el promedio sin el anime eliminado
+  toast('Eliminado de tu lista');
 }
 
 function calificar(id, n) {
@@ -1319,26 +1854,84 @@ function guardarFecha(id, campo, valor) {
   if (i !== -1) { l[i][campo] = valor; saveLista(l); }
 }
 
-// ── Guardar nota personal ──
-function guardarNota(id, texto) {
+// ── Notas: alternar modo edición ──
+function editarNota(id) {
+  const display = document.getElementById(`notaDisplay-${id}`);
+  const input   = document.getElementById(`notaInput-${id}`);
+  const editBtn = document.getElementById(`notaEditBtn-${id}`);
+  const saveBtn = document.getElementById(`notaSaveBtn-${id}`);
+  if (!display || !input) return;
+
+  display.style.display = 'none';
+  input.style.display   = 'block';
+  editBtn.style.display = 'none';
+  saveBtn.style.display = 'inline-block';
+  input.focus();
+}
+
+function guardarNotaUI(id) {
+  const display = document.getElementById(`notaDisplay-${id}`);
+  const input   = document.getElementById(`notaInput-${id}`);
+  const editBtn = document.getElementById(`notaEditBtn-${id}`);
+  const saveBtn = document.getElementById(`notaSaveBtn-${id}`);
+  if (!display || !input) return;
+
+  const texto = input.value;
+
+  // Guardar en localStorage
   const l = miLista(), i = l.findIndex(x => x.id === id);
   if (i !== -1) { l[i].nota = texto; saveLista(l); }
+
+  // Volver a modo lectura
+  const vacia = texto.trim() === '';
+  display.className        = `notes-text${vacia?' empty':''}`;
+  display.innerHTML        = vacia ? 'Sin notas aún...' : texto.replace(/</g,'&lt;');
+  display.style.display    = 'block';
+  input.style.display      = 'none';
+  editBtn.style.display    = 'inline-block';
+  saveBtn.style.display    = 'none';
+  toast('Nota guardada');
 }
 
 function renderLista() {
   const l    = miLista();
   const cont = document.getElementById('listCont');
-  const fil  = catActiva==='all' ? l : l.filter(x => x.categoria===catActiva);
+  const countEl = document.getElementById('listSearchCount');
 
-  if (!fil.length) {
-    cont.innerHTML = htmlEmpty(l.length===0
-      ? 'Tu lista está vacía.<br>Busca animes y agrégalos.'
-      : 'No hay animes en esta categoría.');
-    actualizarContadores(); return;
+  // Filtrar por categoría
+  let fil = catActiva === 'all' ? l : l.filter(x => x.categoria === catActiva);
+
+  // Filtrar por género/tipo si hay uno activo
+  if (genreActivo) {
+    fil = fil.filter(a => {
+      const enGeneros = (a.genres || '').split(',').map(g => g.trim()).includes(genreActivo);
+      const enTipo    = (a.type || '') === genreActivo;
+      return enGeneros || enTipo;
+    });
   }
 
-  cont.innerHTML = fil.map(a => {
-    const epTotal = a.episodes || 0;
+  // Filtrar por búsqueda de texto si hay query
+  if (queryLista) {
+    fil = fil.filter(x => (x.title || '').toLowerCase().includes(queryLista));
+    if (countEl) countEl.innerHTML = fil.length
+      ? `<strong>${fil.length}</strong> resultado${fil.length !== 1 ? 's' : ''} para "<strong>${queryLista}</strong>"`
+      : `Sin resultados para "<strong>${queryLista}</strong>"`;
+  } else {
+    if (countEl) countEl.innerHTML = '';
+  }
+
+  if (!fil.length) {
+    cont.innerHTML = htmlEmpty(
+      l.length === 0 ? 'Tu lista está vacía.<br>Busca animes y agrégalos.' :
+      queryLista     ? `Sin resultados para "${queryLista}"` :
+      genreActivo    ? `No tienes animes de "${genreActivo}" en esta categoría.` :
+                       'No hay animes en esta categoría.');
+    actualizarContadores();
+    buildGenreFilter();
+    return;
+  }
+
+  cont.innerHTML = fil.map(a => {    const epTotal = a.episodes || 0;
     const epVisto = a.epVisto  || 0;
     const pctEp   = epTotal > 0 ? Math.min(100, Math.round(epVisto / epTotal * 100)) : 0;
 
@@ -1366,30 +1959,68 @@ function renderLista() {
       </div>`;
     }
 
-    // ── Fechas (inicio y fin) ──
-    const datesHTML = `
-      <div class="dates-wrap">
-        <div class="date-field">
-          <span class="date-lbl">FECHA INICIO</span>
-          <input class="date-inp" type="date" value="${a.fechaInicio||''}"
-            onchange="guardarFecha(${a.id},'fechaInicio',this.value)">
-        </div>
-        ${a.categoria === 'terminado' ? `
-        <div class="date-field">
-          <span class="date-lbl">FECHA FIN</span>
-          <input class="date-inp" type="date" value="${a.fechaFin||''}"
-            onchange="guardarFecha(${a.id},'fechaFin',this.value)">
-        </div>` : ''}
-      </div>`;
+    // ── Fechas ──
+    // porver: no se muestran fechas
+    // viendo: solo fecha de inicio (editable)
+    // terminado: fecha de inicio (readonly) + fecha de fin (editable)
+    let datesHTML = '';
+    if (a.categoria === 'viendo') {
+      datesHTML = `
+        <div class="dates-wrap">
+          <div class="date-field">
+            <span class="date-lbl">FECHA INICIO</span>
+            <input class="date-inp" type="date" value="${a.fechaInicio||''}"
+              onchange="guardarFecha(${a.id},'fechaInicio',this.value)">
+          </div>
+        </div>`;
+    } else if (a.categoria === 'terminado') {
+      datesHTML = `
+        <div class="dates-wrap">
+          <div class="date-field">
+            <span class="date-lbl">FECHA INICIO</span>
+            <input class="date-inp" type="date" value="${a.fechaInicio||''}"
+              readonly title="No editable una vez terminado">
+          </div>
+          <div class="date-field">
+            <span class="date-lbl">FECHA FIN</span>
+            <input class="date-inp" type="date" value="${a.fechaFin||''}"
+              onchange="guardarFecha(${a.id},'fechaFin',this.value)">
+          </div>
+        </div>`;
+    }
 
-    // ── Notas personales ──
-    const notasHTML = `
+    // ── Notas — modo lectura con botón Editar / Guardar ──
+    const notaTexto  = a.nota || '';
+    const notaVacia  = notaTexto.trim() === '';
+    const notasHTML  = `
       <div class="notes-wrap">
         <div class="notes-lbl">MIS NOTAS</div>
-        <textarea class="notes-inp"
-          placeholder="Escribe tu opinión, recomendaciones..."
-          onchange="guardarNota(${a.id},this.value)">${a.nota||''}</textarea>
+        <div id="notaDisplay-${a.id}" class="notes-text${notaVacia?' empty':''}">
+          ${notaVacia ? 'Sin notas aún...' : notaTexto.replace(/</g,'&lt;')}
+        </div>
+        <textarea id="notaInput-${a.id}" class="notes-inp"
+          style="display:none"
+          placeholder="Escribe tu opinión, recomendaciones...">${notaTexto}</textarea>
+        <div class="notes-acts">
+          <button class="btn-note" id="notaEditBtn-${a.id}"
+            onclick="editarNota(${a.id})">✏ EDITAR</button>
+          <button class="btn-note save" id="notaSaveBtn-${a.id}"
+            style="display:none"
+            onclick="guardarNotaUI(${a.id})">✓ GUARDAR</button>
+        </div>
       </div>`;
+
+    // ── Selector de categoría ──
+    // terminado: no puede volver a por ver ni viendo
+    const catSelect = a.categoria === 'terminado'
+      ? `<select class="cat-sel" disabled title="Un anime terminado no puede retroceder de categoría">
+           <option value="terminado" selected>✓ Terminado</option>
+         </select>`
+      : `<select class="cat-sel" onchange="cambiarCat(${a.id},this.value)">
+           <option value="porver"    ${a.categoria==='porver' ?'selected':''}>Por ver</option>
+           <option value="viendo"    ${a.categoria==='viendo' ?'selected':''}>Viendo</option>
+           <option value="terminado">Terminado</option>
+         </select>`;
 
     return `<div class="li">
       <img src="${a.image}" alt="${(a.title||'').replace(/"/g,'')}" loading="lazy" onerror="this.style.display='none'">
@@ -1401,11 +2032,7 @@ function renderLista() {
         ${datesHTML}
         ${notasHTML}
         <div class="li-acts">
-          <select class="cat-sel" onchange="cambiarCat(${a.id},this.value)">
-            <option value="porver"    ${a.categoria==='porver'   ?'selected':''}>Por ver</option>
-            <option value="viendo"    ${a.categoria==='viendo'   ?'selected':''}>Viendo</option>
-            <option value="terminado" ${a.categoria==='terminado'?'selected':''}>Terminado</option>
-          </select>
+          ${catSelect}
           <button class="btn-rm" onclick="quitarAnime(${a.id})">✕ QUITAR</button>
         </div>
       </div>
@@ -1413,6 +2040,7 @@ function renderLista() {
   }).join('');
 
   actualizarContadores();
+  buildGenreFilter();   // Reconstruir tags con los datos actuales
 }
 
 function actualizarContadores() {
@@ -1445,7 +2073,13 @@ function renderStats() {
         <span><strong>${term.length}</strong> term · <strong>${vnd.length}</strong> viendo · <strong>${pv.length}</strong> por ver</span>
         <strong>${pct}%</strong>
       </div>
-    </div>`;
+    </div>
+    ${esSemannaWrapped() ? `
+    <div style="grid-column:1/-1">
+      <button class="btn-wrapped" onclick="abrirWrapped()">
+        🎄 CYBER//ANIME WRAPPED — VER MI AÑO
+      </button>
+    </div>` : ''}`;
 }
 
 /* ════════════════════════════════════════
@@ -1634,8 +2268,357 @@ async function traducirSinopsis() {
 }
 
 /* ════════════════════════════════════════
-   TOAST
+   FILTRO POR GÉNERO / TIPO
+   Construye dinámicamente los tags con los
+   géneros y tipos presentes en la lista
 ════════════════════════════════════════ */
+function buildGenreFilter() {
+  const wrap  = document.getElementById('genreFilterWrap');
+  const cont  = document.getElementById('genreTags');
+  if (!wrap || !cont) return;
+
+  // Tomar solo los animes de la categoría activa
+  const l   = miLista();
+  const fil = catActiva === 'all' ? l : l.filter(x => x.categoria === catActiva);
+
+  // Contar géneros Y tipos de la selección actual
+  const mapa = {};
+
+  fil.forEach(a => {
+    // Tipos (TV, Movie, OVA, ONA, Special…)
+    if (a.type && a.type !== '?') {
+      mapa[a.type] = (mapa[a.type] || 0) + 1;
+    }
+    // Géneros guardados como "Action, Drama, Fantasy"
+    if (a.genres) {
+      a.genres.split(',').forEach(g => {
+        const n = g.trim();
+        if (n && n !== '—') mapa[n] = (mapa[n] || 0) + 1;
+      });
+    }
+  });
+
+  const tags = Object.entries(mapa)
+    .filter(([, c]) => c > 0)
+    .sort((a, b) => b[1] - a[1]);   // Ordenar por cantidad
+
+  if (tags.length < 2) {
+    // Si hay menos de 2 etiquetas no vale la pena mostrar el filtro
+    wrap.style.display = 'none';
+    return;
+  }
+
+  wrap.style.display = 'block';
+
+  cont.innerHTML = [
+    // Botón "TODOS" siempre primero
+    `<button class="gtag${genreActivo === '' ? ' active' : ''}"
+      onclick="selGenre('')">TODOS</button>`
+  ].concat(
+    tags.map(([name, count]) =>
+      `<button class="gtag${genreActivo === name ? ' active' : ''}"
+        onclick="selGenre('${name.replace(/'/g, "\\'")}')">
+        ${name} <span class="gtag-count">${count}</span>
+      </button>`
+    )
+  ).join('');
+}
+
+function selGenre(g) {
+  genreActivo = g;
+  // Actualizar visual de los tags sin re-construir toda la barra
+  document.querySelectorAll('.gtag').forEach(btn => {
+    const esEste = btn.textContent.trim().startsWith(g || 'TODOS');
+    btn.classList.toggle('active', g === '' ? btn.textContent.trim() === 'TODOS' : esEste && g !== '');
+  });
+  // Re-renderizar solo la lista
+  renderLista();
+}
+
+/* ════════════════════════════════════════
+   BUSCADOR DENTRO DE MI LISTA
+════════════════════════════════════════ */
+let queryLista = ''; // Texto actual del buscador de lista
+
+function filtrarLista(q) {
+  queryLista = q.toLowerCase().trim();
+  renderLista();
+}
+
+/* ════════════════════════════════════════
+   WRAPPED ANUAL
+   Solo visible la última semana de diciembre
+   (días 25 al 31 de diciembre)
+════════════════════════════════════════ */
+
+// Verifica si hoy es la última semana de diciembre
+function esSemannaWrapped() {
+  const hoy = new Date();
+  return hoy.getMonth() === 11 && hoy.getDate() >= 25;
+}
+
+/* ════════════════════════════════════════
+   WRAPPED — MOTOR DE HISTORIAS
+   6 slides animados tipo Spotify/Stories
+════════════════════════════════════════ */
+
+const W_DURATIONS = [6, 7, 8, 7, 8, 99]; // segundos por slide (último = infinito)
+let wSlideActual  = 0;
+let wTimer        = null;
+let wData         = {};   // datos calculados una sola vez
+
+const PERSONAS = {
+  'Action':       ['GUERRERO//DIGITAL',    'Tu corazón late al ritmo de las batallas. Sin acción no hay vida.'],
+  'Adventure':    ['EXPLORADOR//INFINITO', 'Cada anime es un mundo nuevo por descubrir. Nunca pares de viajar.'],
+  'Romance':      ['AGENTE DEL AMOR',      'Sabes que los mejores animes siempre tienen una historia de amor.'],
+  'Comedy':       ['MAESTRO//DEL_CAOS',    'La risa es tu arma y los gags tu munición. Nada te pone serio.'],
+  'Drama':        ['SENSIBILIDAD//MAX',    'Sientes cada historia como propia. Probablemente lloraste este año.'],
+  'Fantasy':      ['INVOCADOR//SUPREMO',   'Los mundos mágicos son tu hogar. La realidad puede esperar.'],
+  'Horror':       ['BUSCADOR//DE_SOMBRAS', 'No te asusta lo desconocido. De hecho, lo buscas activamente.'],
+  'Sci-Fi':       ['HACKER//DEL_FUTURO',   'La ciencia ficción es tu visión del mañana. Vives adelantado.'],
+  'Slice of Life':['OBSERVADOR//SERENO',   'Encuentras belleza en lo cotidiano. La calma es tu estética.'],
+  'Thriller':     ['ANALISTA//SOMBRÍO',    'Te gustan las tramas que te mantienen al borde del asiento.'],
+  'Sports':       ['CAMPEÓN//BINARIO',     'Cada derrota es aprendizaje, cada victoria es gloria digital.'],
+  'Supernatural': ['INVOCADOR//DEL_CAOS',  'Lo imposible te fascina. Cuantas más reglas se rompan, mejor.'],
+  'Mystery':      ['DETECTIVE//NEÓN',      'Eres el que resuelve el misterio antes que el protagonista.'],
+  'Mecha':        ['PILOTO//SOLITARIO',    'El acero y la voluntad humana. Nada te impresiona más que un buen mecha.'],
+  'Isekai':       ['VIAJERO//DE_MUNDOS',   'La vida normal no es suficiente. Siempre buscas el portal al otro mundo.'],
+};
+
+const CIERRES = [
+  ['MISIÓN COMPLETADA', 'Sin arrepentimientos. Hasta el próximo año.'],
+  ['NIVEL SUBIDO',      'Tu biblioteca creció. Tu criterio también.'],
+  ['SISTEMA ACTIVO',    'Otro año. Otra temporada. Siempre hay más por ver.'],
+  ['DATOS ANALIZADOS',  'Eres imparable. El anime lo sabe.'],
+];
+
+function calcularDatosWrapped() {
+  const l    = miLista();
+  const term = l.filter(x => x.categoria === 'terminado');
+  const año  = new Date().getFullYear();
+  const eps  = term.reduce((s,a) => s+(a.epVisto||a.episodes||0), 0);
+  const hrs  = Math.floor(eps*24/60);
+  const dias = Math.floor(hrs/24);
+  const cals = term.filter(x => x.miCal > 0);
+  const prom = cals.length ? (cals.reduce((s,a)=>s+a.miCal,0)/cals.length).toFixed(1) : '—';
+
+  const genMap = {};
+  term.forEach(a => (a.genres||'').split(',').forEach(g => {
+    const n = g.trim(); if(n && n!=='—') genMap[n]=(genMap[n]||0)+1;
+  }));
+  const topGen  = Object.entries(genMap).sort((a,b)=>b[1]-a[1]);
+  const top1Gen = topGen[0]?.[0] || '';
+  const [perTipo, perDesc] = PERSONAS[top1Gen]
+    || ['OTAKU//ABSOLUTO','Tu mente no puede catalogarse. Eres un fenómeno sin clasificar.'];
+
+  const top3   = [...cals].sort((a,b)=>b.miCal-a.miCal).slice(0,3);
+  const mejor  = top3[0];
+  const cierre = CIERRES[Math.min(Math.floor(Math.random()*CIERRES.length), CIERRES.length-1)];
+
+  return { l,term,año,eps,hrs,dias,cals,prom,topGen,top1Gen,top1Count:topGen[0]?.[1]||0,
+           perTipo,perDesc,top3,mejor,cierre };
+}
+
+function poblarSlides(d) {
+  const bg = d.mejor?.image || '';
+  // Poner la misma imagen de fondo en todos los slides
+  [0,1,2,3,4,5].forEach(i => {
+    const el = document.getElementById(`wBg${i}`);
+    if(el && bg) el.style.backgroundImage = `url('${bg}')`;
+  });
+
+  // ── Slide 0: Intro ──
+  document.getElementById('wS0Año').textContent   = d.año;
+  document.getElementById('wS0Total').textContent = d.term.length;
+
+  // ── Slide 1: Tiempo ──
+  document.getElementById('wS1Hrs').textContent = d.hrs;
+  document.getElementById('wS1Sub').textContent =
+    `Eso equivale a ${d.dias} día${d.dias!==1?'s':''} completo${d.dias!==1?'s':''} de anime`;
+  document.getElementById('wS1Stats').innerHTML = `
+    <div class="w-s4box w-anim"><div class="w-s4n">${d.term.length}</div><div class="w-s4l">ANIMES</div></div>
+    <div class="w-s4box w-anim"><div class="w-s4n">${d.eps}</div><div class="w-s4l">EPISODIOS</div></div>
+    <div class="w-s4box w-anim"><div class="w-s4n">${d.prom!=='—'?'★'+d.prom:'—'}</div><div class="w-s4l">PROMEDIO</div></div>
+    <div class="w-s4box w-anim"><div class="w-s4n">${d.cals.length}</div><div class="w-s4l">CALIFICADOS</div></div>`;
+
+  // ── Slide 2: Personalidad ──
+  document.getElementById('wS2Chip').textContent     = '▸ TIPO DETECTADO';
+  document.getElementById('wS2Tipo').textContent     = d.perTipo;
+  document.getElementById('wS2Desc').textContent     = d.perDesc;
+  document.getElementById('wS2Genre').textContent    = d.top1Gen || 'Mixto';
+  document.getElementById('wS2GenreCnt').textContent = d.top1Gen
+    ? `${d.top1Count} anime${d.top1Count!==1?'s':''} de este género en tu lista`
+    : 'Tienes una colección muy variada';
+
+  // ── Slide 3: Top 3 ──
+  const podio   = document.getElementById('wS3Podio');
+  const noCal   = document.getElementById('wS3NoCal');
+  const MEDALS  = ['gold','silver','bronze'];
+  const MNAMES  = ['🥇','🥈','🥉'];
+  const ORDERS  = ['first','second','third'];
+  const IMG_FB  = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120'%3E%3Crect fill='%230a0a0a' width='80' height='120'/%3E%3C/svg%3E`;
+
+  if(d.top3.length) {
+    noCal.style.display = 'none';
+    podio.style.display = '';
+    podio.innerHTML = d.top3.map((a,i) => `
+      <div class="w-podio-item ${ORDERS[i]} w-anim">
+        <div class="w-podio-medal ${MEDALS[i]}">${MNAMES[i]}</div>
+        <img class="w-podio-img" src="${a.image||IMG_FB}" alt="${(a.title||'').replace(/"/g,'')}"
+          onerror="this.src='${IMG_FB}'">
+        ${a.miCal ? `<div class="w-podio-score">★${a.miCal}</div>` : ''}
+        <div class="w-podio-name">${a.title||'—'}</div>
+      </div>`).join('');
+  } else {
+    podio.style.display = 'none';
+    noCal.style.display = 'block';
+  }
+
+  // ── Slide 4: Géneros ──
+  const maxG = d.topGen[0]?.[1] || 1;
+  document.getElementById('wS4Genres').innerHTML = d.topGen.slice(0,6).map(([n,c]) => `
+    <div class="w-gitem">
+      <span class="w-gname">${n}</span>
+      <div class="w-gtrack">
+        <div class="w-gfill" style="--target-w:${Math.round(c/maxG*100)}%"></div>
+      </div>
+      <span class="w-gcnt">${c}</span>
+    </div>`).join('')
+    || `<div style="font-size:.7rem;color:var(--g)">Sin datos de géneros aún.</div>`;
+
+  // ── Slide 5: Cierre ──
+  document.getElementById('wFinalYearBg').textContent = d.año;
+  document.getElementById('wS5Main').textContent      = d.cierre[0];
+  document.getElementById('wS5Sub').textContent       = d.cierre[1];
+  document.getElementById('wS5Firma').textContent     = `THEBRODERS · ${d.año}`;
+}
+
+function construirProgressBar(total) {
+  const bar = document.getElementById('wProgressBar');
+  bar.innerHTML = Array.from({length:total}, (_,i) =>
+    `<div class="w-prog-seg" id="wpSeg${i}"><div class="w-prog-fill" id="wpFill${i}"></div></div>`
+  ).join('');
+}
+
+function wIrASlide(n) {
+  const total  = 6;
+  if(n < 0 || n >= total) return;
+
+  clearTimeout(wTimer);
+
+  // Desactivar slide anterior
+  const prev = document.getElementById(`wSlide${wSlideActual}`);
+  if(prev) prev.classList.remove('active');
+
+  // Marcar progreso
+  for(let i=0; i<total; i++) {
+    const fill = document.getElementById(`wpFill${i}`);
+    if(!fill) continue;
+    fill.classList.remove('playing');
+    fill.style.animation = 'none'; // reset
+    fill.offsetHeight;             // reflow
+    if(i < n)      { fill.classList.add('done'); fill.style.width='100%'; }
+    else if(i > n) { fill.classList.remove('done'); fill.style.width='0%'; }
+    else {
+      fill.classList.remove('done'); fill.style.width='0%';
+      // Arrancar animación con la duración del slide
+      const dur = W_DURATIONS[n];
+      if(dur < 90) {
+        fill.style.setProperty('--dur', dur+'s');
+        void fill.offsetWidth;
+        fill.classList.add('playing');
+      }
+    }
+  }
+
+  wSlideActual = n;
+  const next = document.getElementById(`wSlide${n}`);
+  if(next) next.classList.add('active');
+
+  // Auto-avanzar si no es el último
+  if(W_DURATIONS[n] < 90) {
+    wTimer = setTimeout(() => wNext(), W_DURATIONS[n] * 1000);
+  }
+}
+
+function wNext() {
+  if(wSlideActual < 5) wIrASlide(wSlideActual + 1);
+}
+function wPrev() {
+  if(wSlideActual > 0) wIrASlide(wSlideActual - 1);
+}
+
+function abrirWrapped() {
+  wData = calcularDatosWrapped();
+  poblarSlides(wData);
+  construirProgressBar(6);
+  wSlideActual = 0;
+  document.getElementById('wrappedBg').classList.add('open');
+  // Pequeño delay para que el DOM esté listo
+  setTimeout(() => wIrASlide(0), 80);
+}
+
+function cerrarWrapped() {
+  clearTimeout(wTimer);
+  // Desactivar slide actual
+  const s = document.getElementById(`wSlide${wSlideActual}`);
+  if(s) s.classList.remove('active');
+  document.getElementById('wrappedBg').classList.remove('open');
+}
+
+// Cerrar al tocar el fondo (área fuera de las zonas de tap)
+document.getElementById('wrappedBg').addEventListener('click', function(e) {
+  // Solo cerrar si se toca directamente el fondo, no los controles
+  if(e.target === this) cerrarWrapped();
+});
+
+// Soporte para swipe horizontal en móvil
+(function() {
+  let xStart = 0;
+  const bg = document.getElementById('wrappedBg');
+  bg.addEventListener('touchstart', e => { xStart = e.touches[0].clientX; }, {passive:true});
+  bg.addEventListener('touchend', e => {
+    const diff = xStart - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40) diff > 0 ? wNext() : wPrev();
+  }, {passive:true});
+})();
+
+// Descargar el slide actual como imagen
+async function descargarWrapped() {
+  const btn = document.querySelector('.w-actions-bar .btn-n');
+  if(btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+  try {
+    if(!window.html2canvas) {
+      await new Promise((res,rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+
+    // Capturar el slide del cierre (slide 5) que tiene el resumen completo
+    const slideEl = document.getElementById('wSlide5');
+    const canvas  = await html2canvas(slideEl, {
+      backgroundColor:'#000', scale:2, useCORS:true, logging:false,
+      width: window.innerWidth, height: window.innerHeight,
+    });
+
+    const link      = document.createElement('a');
+    link.download   = `cyberanime-wrapped-${wData.año||new Date().getFullYear()}.png`;
+    link.href       = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast('✓ Imagen guardada — ¡a compartir!');
+  } catch(e) {
+    console.error(e);
+    toast('No se pudo generar la imagen.');
+  } finally {
+    if(btn) { btn.disabled = false; btn.textContent = '⬇ GUARDAR'; }
+  }
+}
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
