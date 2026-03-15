@@ -913,6 +913,11 @@ async function abrirModal(id) {
   document.getElementById('mSyn').textContent   = '';
   document.getElementById('mTrailer').innerHTML = '';
   document.getElementById('mBtns').innerHTML    = '';
+  // Resetear botón de traducción
+  const btnTr = document.getElementById('btnTraducir');
+  btnTr.textContent       = '🌐 TRADUCIR AL ESPAÑOL →';
+  btnTr.dataset.traducido = 'no';
+  btnTr.disabled          = false;
   // Volver a pestaña Sinopsis
   document.querySelectorAll('.mtab').forEach(b   => b.classList.remove('active'));
   document.querySelectorAll('.mpanel').forEach(p => p.classList.remove('active'));
@@ -1315,15 +1320,60 @@ function extraerYouTubeId(trailer) {
 
 /* ════════════════════════════════════════
    TRADUCIR SINOPSIS
+   Usa el endpoint público de Google Translate
+   (no requiere clave, funciona desde el navegador)
 ════════════════════════════════════════ */
-function traducirSinopsis() {
-  const texto = document.getElementById('mSyn').textContent.trim();
+async function traducirSinopsis() {
+  const parrafo = document.getElementById('mSyn');
+  const btn     = document.getElementById('btnTraducir');
+  const texto   = parrafo.textContent.trim();
+
   if (!texto || texto === '—' || texto === 'Sin sinopsis disponible.') {
     toast('No hay sinopsis para traducir.');
     return;
   }
-  const url = `https://translate.google.com/?sl=en&tl=es&text=${encodeURIComponent(texto)}&op=translate`;
-  window.open(url, '_blank');
+
+  // Alternar: si ya está traducido, volver al original
+  if (btn.dataset.traducido === 'si') {
+    parrafo.textContent   = animeActual.synopsis;
+    btn.textContent       = '🌐 TRADUCIR AL ESPAÑOL →';
+    btn.dataset.traducido = 'no';
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = '⏳ TRADUCIENDO...';
+
+  try {
+    // Endpoint público de Google Translate (client=gtx, sin API key)
+    // Funciona desde el navegador sin problemas de CORS
+    const url = 'https://translate.googleapis.com/translate_a/single'
+      + `?client=gtx&sl=en&tl=es&dt=t&q=${encodeURIComponent(texto)}`;
+
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+
+    // La respuesta es un array anidado: [[["texto traducido","original",...],...],...]
+    // Unir todos los fragmentos traducidos por si la sinopsis fue dividida
+    const traduccion = json[0]
+      .map(frag => frag[0])
+      .join('');
+
+    if (!traduccion) throw new Error('Respuesta vacía');
+
+    parrafo.textContent   = traduccion;
+    btn.textContent       = '↩ VER ORIGINAL';
+    btn.dataset.traducido = 'si';
+
+  } catch(e) {
+    console.error('Traducción fallida:', e);
+    toast('No se pudo traducir. Intenta de nuevo.');
+    btn.textContent = '🌐 TRADUCIR AL ESPAÑOL →';
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 /* ════════════════════════════════════════
