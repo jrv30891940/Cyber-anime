@@ -1642,12 +1642,12 @@ function cargarTrailer() {
   if (!animeActual) return;
   const cont = document.getElementById('mTrailer');
 
-  if (animeActual.trailerId) {
+  if (animeActual.trailerId !== '') {
     // Tráiler oficial registrado en Jikan — reproducir directo
     cont.innerHTML = `
       <div class="yt-w">
         <iframe
-          src="${animeActual.trailerId}"
+          src="${animeActual.trailerId}&rel=0&modestbranding=1"
           allowfullscreen loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
         </iframe>
@@ -2192,21 +2192,7 @@ function cargarRespaldo(event) {
 ════════════════════════════════════════ */
 function extraerYouTubeId(trailer) {
   if (!trailer) return null;
-
-  // Caso 1: campo youtube_id directo y no vacío
-  if (trailer.youtube_id && trailer.youtube_id.trim() !== '') {
-    return trailer.youtube_id.trim();
-  }
-
-  // Caso 2: sacar el ID del embed_url o url con regex
-  const fuente = trailer.embed_url || trailer.url || '';
-  if (!fuente) return null;
-
-  // Patrones posibles de URL de YouTube
-  const match = fuente.match(
-    /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? match[1] : null;
+  return trailer.embed_url;
 }
 
 /* ════════════════════════════════════════
