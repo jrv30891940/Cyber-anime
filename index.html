@@ -16,7 +16,7 @@
   --nc: #0a0a0a;
   --nb: #111;
   --b:  #e8ffe8;
-  --g:  #555;
+  --g:  #999;   /* Gris legible — antes era #555 */
   --ft: 'Orbitron', monospace;
   --fb: 'Share Tech Mono', monospace;
 }
@@ -61,12 +61,12 @@ header {
   letter-spacing:2px; text-decoration:none; line-height:1;
 }
 .logo small {
-  display:block; font-size:.52rem; letter-spacing:4px;
-  color:var(--b); opacity:.45; font-weight:400;
+  display:block; font-size:.68rem; letter-spacing:4px;
+  color:var(--b); opacity:.55; font-weight:400;
 }
 .live-dot {
   display:flex; align-items:center; gap:6px;
-  font-size:.6rem; color:var(--v); letter-spacing:2px;
+  font-size:.72rem; color:var(--v); letter-spacing:2px;
 }
 .live-dot::before {
   content:''; width:7px; height:7px;
@@ -87,7 +87,7 @@ header {
 .tab-btn {
   flex:1; min-width:0; padding:12px 4px;
   background:none; border:none; border-bottom:2px solid transparent;
-  color:#888; font-family:var(--ft); font-size:.48rem;
+  color:#888; font-family:var(--ft); font-size:.6rem;
   letter-spacing:1.5px; cursor:pointer; transition:all .2s; white-space:nowrap;
 }
 .tab-btn.active { color:var(--v); border-bottom-color:var(--v); text-shadow:0 0 8px var(--vg); }
@@ -100,7 +100,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 
 /* ── SECTION TITLE ─────────────────────────────── */
 .sec-t {
-  font-family:var(--ft); font-size:.68rem; letter-spacing:4px;
+  font-family:var(--ft); font-size:.78rem; letter-spacing:3px;
   color:var(--v); margin-bottom:14px; padding-bottom:8px;
   border-bottom:1px solid var(--vd); text-shadow:0 0 10px var(--vg);
   display:flex; align-items:center; gap:10px;
@@ -110,7 +110,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 /* ── BOTÓN NEÓN ────────────────────────────────── */
 .btn-n {
   background:transparent; border:1px solid var(--v);
-  color:var(--v); font-family:var(--ft); font-size:.58rem;
+  color:var(--v); font-family:var(--ft); font-size:.68rem;
   letter-spacing:2px; padding:11px 15px; border-radius:4px;
   cursor:pointer; transition:background .2s,color .2s,box-shadow .2s;
   white-space:nowrap; text-shadow:0 0 6px var(--vg); box-shadow:0 0 8px var(--vg);
@@ -120,8 +120,8 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 
 /* ── BOTÓN QUITAR ──────────────────────────────── */
 .btn-rm {
-  background:none; border:1px solid #300; color:#f33;
-  font-family:var(--fb); font-size:.58rem; padding:4px 8px;
+  background:none; border:1px solid #300; color:#f55;
+  font-family:var(--fb); font-size:.7rem; padding:5px 9px;
   border-radius:3px; cursor:pointer; transition:all .2s;
 }
 .btn-rm:hover { background:#f33; color:var(--n); border-color:#f33; }
@@ -156,7 +156,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 @keyframes scan { 0%{top:100%} 100%{top:-100%} }
 .btn-srp:hover:not(:disabled) { background:var(--v); color:var(--n); box-shadow:0 0 36px var(--v); transform:scale(1.02); }
 .btn-srp:disabled { opacity:.45; cursor:not-allowed; }
-.srp-hint { font-size:.58rem; color:var(--g); margin-top:8px; letter-spacing:1px; }
+.srp-hint { font-size:.72rem; color:var(--g); margin-top:8px; letter-spacing:1px; }
 
 /* ── GRID ──────────────────────────────────────── */
 .grid {
@@ -180,41 +180,41 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .c-score {
   position:absolute; top:6px; right:6px;
   background:rgba(0,0,0,.85); border:1px solid var(--v);
-  color:var(--v); font-family:var(--ft); font-size:.52rem;
+  color:var(--v); font-family:var(--ft); font-size:.65rem;
   padding:2px 6px; border-radius:3px;
 }
 .c-rank {
   position:absolute; top:0; left:0;
   background:var(--v); color:var(--n);
-  font-family:var(--ft); font-size:.58rem; font-weight:900;
+  font-family:var(--ft); font-size:.68rem; font-weight:900;
   padding:3px 8px; border-bottom-right-radius:4px; min-width:22px; text-align:center;
 }
 .c-rank.top3 { background:#ffd700; }
 .c-body { padding:8px; }
 .c-time { display:flex; gap:3px; margin-bottom:5px; flex-wrap:wrap; }
 .tbadge {
-  font-family:var(--ft); font-size:.46rem; letter-spacing:.5px;
+  font-family:var(--ft); font-size:.58rem; letter-spacing:.5px;
   padding:2px 5px; border-radius:3px;
 }
 .tbadge.jst { background:rgba(57,255,20,.1); border:1px solid var(--vd); color:var(--v); }
 .tbadge.loc { background:rgba(255,255,255,.04); border:1px solid #222; color:var(--b); }
 .c-title {
-  font-size:.69rem; line-height:1.3; color:var(--b);
+  font-size:.78rem; line-height:1.3; color:var(--b);
   display:-webkit-box; -webkit-line-clamp:2;
   -webkit-box-orient:vertical; overflow:hidden; margin-bottom:5px;
 }
-.c-meta { font-size:.57rem; color:var(--g); margin-bottom:6px; }
+.c-meta { font-size:.7rem; color:var(--g); margin-bottom:6px; }
 .c-btn {
   width:100%; background:none; border:1px solid var(--vd);
-  color:var(--v); font-family:var(--fb); font-size:.58rem;
+  color:var(--v); font-family:var(--fb); font-size:.68rem;
   padding:5px; border-radius:3px; cursor:pointer; transition:all .2s;
 }
 .c-btn:hover { background:var(--vd); border-color:var(--v); }
 .c-btn.in { background:var(--vd); border-color:var(--v); color:var(--b); }
 
 /* ── STATUS MSGS ───────────────────────────────── */
-.msg { text-align:center; padding:34px 16px; color:var(--g); font-size:.75rem; letter-spacing:1px; line-height:1.8; }
-.msg .ico { font-size:1.9rem; display:block; margin-bottom:12px; }
+.msg { text-align:center; padding:34px 16px; color:var(--g); font-size:.82rem; letter-spacing:1px; line-height:1.8; }
+.msg .ico { font-size:2rem; display:block; margin-bottom:12px; }
 .bars { display:flex; justify-content:center; gap:4px; margin-bottom:12px; }
 .bars span { width:3px; height:20px; background:var(--v); border-radius:2px; animation:bar .8s ease-in-out infinite; }
 .bars span:nth-child(2){animation-delay:.1s}
@@ -223,6 +223,117 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .bars span:nth-child(5){animation-delay:.4s}
 @keyframes bar { 0%,100%{transform:scaleY(.35);opacity:.3} 50%{transform:scaleY(1);opacity:1} }
 
+/* ── SKELETON SCREENS ──────────────────────────── */
+/* Animación de pulso verde sobre fondo oscuro */
+@keyframes sk-pulse {
+  0%,100% { opacity:.25; }
+  50%      { opacity:.6;  }
+}
+.sk-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:11px;
+}
+/* Tarjeta skeleton (imita la tarjeta real) */
+.sk-card {
+  background:var(--nc); border:1px solid var(--nb);
+  border-radius:6px; overflow:hidden;
+}
+.sk-img  {
+  width:100%; aspect-ratio:3/4;
+  background:linear-gradient(135deg,#0d1a0d,#111);
+  animation:sk-pulse 1.4s ease-in-out infinite;
+}
+.sk-body { padding:8px; display:flex; flex-direction:column; gap:6px; }
+.sk-line {
+  height:8px; border-radius:3px;
+  background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
+  background-size:200% 100%;
+  animation:sk-slide 1.6s linear infinite;
+}
+.sk-line.w70  { width:70%; }
+.sk-line.w50  { width:50%; }
+.sk-line.w90  { width:90%; }
+.sk-btn {
+  height:22px; border-radius:3px; margin-top:2px;
+  background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
+  background-size:200% 100%;
+  animation:sk-slide 1.6s linear infinite;
+}
+@keyframes sk-slide {
+  0%   { background-position:200% 0; }
+  100% { background-position:-200% 0; }
+}
+
+/* Skeleton para item de lista */
+.sk-li {
+  display:flex; gap:11px; background:var(--nc);
+  border:1px solid var(--nb); border-radius:6px;
+  padding:10px; margin-bottom:9px;
+}
+.sk-li-img {
+  width:50px; height:67px; border-radius:3px; flex-shrink:0;
+  background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
+  background-size:200% 100%;
+  animation:sk-slide 1.6s linear infinite;
+}
+.sk-li-body { flex:1; display:flex; flex-direction:column; gap:7px; padding-top:4px; }
+
+/* ── PROGRESO DE EPISODIOS ─────────────────────── */
+.ep-wrap {
+  display:flex; align-items:center; gap:7px;
+  margin-bottom:7px; flex-wrap:wrap;
+}
+.ep-label { font-size:.7rem; color:var(--g); letter-spacing:1px; white-space:nowrap; }
+.ep-label strong { color:var(--v); font-family:var(--ft); }
+/* Botones − y + */
+.ep-btn {
+  background:none; border:1px solid var(--vd); color:var(--v);
+  font-family:var(--ft); font-size:.7rem; width:22px; height:22px;
+  border-radius:3px; cursor:pointer; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s; flex-shrink:0;
+}
+.ep-btn:hover { background:var(--vd); border-color:var(--v); }
+/* Mini barra de progreso de episodios */
+.ep-bar-track {
+  flex:1; min-width:60px; height:4px;
+  background:#111; border-radius:2px; overflow:hidden;
+}
+.ep-bar-fill {
+  height:100%;
+  background:linear-gradient(to right,var(--vd),var(--v));
+  border-radius:2px; transition:width .3s ease;
+  box-shadow:0 0 4px var(--vg);
+}
+
+/* ── FECHAS ────────────────────────────────────── */
+.dates-wrap {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:7px;
+}
+.date-field { display:flex; flex-direction:column; gap:3px; flex:1; min-width:110px; }
+.date-lbl   { font-size:.65rem; color:var(--g); letter-spacing:2px; }
+.date-inp {
+  background:var(--n); border:1px solid #2a2a2a; color:var(--b);
+  font-family:var(--fb); font-size:.72rem; padding:5px 7px;
+  border-radius:3px; outline:none; transition:border-color .2s;
+  color-scheme:dark;
+}
+.date-inp:focus { border-color:var(--vd); }
+
+/* ── NOTAS PERSONALES ──────────────────────────── */
+.notes-wrap { margin-bottom:7px; }
+.notes-lbl  { font-size:.65rem; color:var(--g); letter-spacing:2px; margin-bottom:4px; }
+.notes-inp {
+  width:100%; background:var(--n); border:1px solid #2a2a2a;
+  color:var(--b); font-family:var(--fb); font-size:.72rem;
+  padding:6px 8px; border-radius:3px; outline:none;
+  resize:none; height:56px; line-height:1.5;
+  transition:border-color .2s;
+}
+.notes-inp:focus   { border-color:var(--vd); }
+.notes-inp::placeholder { color:#555; }
+
 /* ── TOP BANNER ────────────────────────────────── */
 .top-banner {
   background:linear-gradient(135deg,#001a00,#000800);
@@ -230,8 +341,8 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   padding:13px 15px; margin-bottom:15px;
   display:flex; align-items:center; justify-content:space-between;
 }
-.top-lbl    { font-family:var(--ft); font-size:.53rem; color:var(--g); letter-spacing:3px; }
-.top-season { font-family:var(--ft); font-size:.82rem; color:var(--v); text-shadow:0 0 12px var(--vg); }
+.top-lbl    { font-family:var(--ft); font-size:.65rem; color:var(--g); letter-spacing:3px; }
+.top-season { font-family:var(--ft); font-size:.9rem; color:var(--v); text-shadow:0 0 12px var(--vg); }
 
 /* ── CALENDARIO ────────────────────────────────── */
 .cal-header {
@@ -239,8 +350,8 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   padding:10px 13px; background:var(--nc);
   border:1px solid var(--vd); border-radius:6px; margin-bottom:13px;
 }
-.cal-day  { font-family:var(--ft); font-size:.7rem; color:var(--v); text-shadow:0 0 8px var(--vg); }
-.cal-sub  { font-size:.57rem; color:var(--g); letter-spacing:2px; margin-top:2px; }
+.cal-day  { font-family:var(--ft); font-size:.82rem; color:var(--v); text-shadow:0 0 8px var(--vg); }
+.cal-sub  { font-size:.7rem; color:var(--g); letter-spacing:2px; margin-top:2px; }
 
 .week-sel { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:15px; }
 .wday {
@@ -249,14 +360,14 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   align-items:center; gap:3px; transition:all .18s; position:relative;
   overflow:hidden;
 }
-.wday-n  { font-family:var(--ft); font-size:.48rem; letter-spacing:1px; color:var(--g); }
-.wday-d  { font-family:var(--ft); font-size:.86rem; color:var(--g); line-height:1; }
+.wday-n  { font-family:var(--ft); font-size:.6rem; letter-spacing:1px; color:var(--g); }
+.wday-d  { font-family:var(--ft); font-size:.95rem; color:var(--g); line-height:1; }
 .wday-dot { width:4px; height:4px; border-radius:50%; background:var(--g); }
 .wday.today  { border-color:var(--vd); }
 .wday.today .wday-n,.wday.today .wday-d { color:var(--b); }
 .wday.today::after {
   content:'HOY'; position:absolute; bottom:2px;
-  font-family:var(--ft); font-size:.34rem; color:var(--v); letter-spacing:1px;
+  font-family:var(--ft); font-size:.45rem; color:var(--v); letter-spacing:1px;
 }
 .wday.active { background:var(--vd); border-color:var(--v); box-shadow:0 0 10px var(--vg); }
 .wday.active .wday-n,.wday.active .wday-d { color:var(--v); text-shadow:0 0 6px var(--vg); }
@@ -264,7 +375,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .wday:hover:not(.active) { border-color:var(--g); }
 .wday:hover:not(.active) .wday-n,.wday:hover:not(.active) .wday-d { color:var(--b); }
 
-.cal-count { font-size:.6rem; color:var(--g); margin-bottom:10px; }
+.cal-count { font-size:.72rem; color:var(--g); margin-bottom:10px; }
 .cal-count strong { color:var(--v); }
 
 /* ── MI LISTA ──────────────────────────────────── */
@@ -272,13 +383,13 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .list-tabs::-webkit-scrollbar { display:none; }
 .ltab {
   background:none; border:1px solid var(--nb); color:var(--g);
-  font-family:var(--fb); font-size:.66rem; padding:6px 13px;
+  font-family:var(--fb); font-size:.75rem; padding:7px 14px;
   border-radius:20px; cursor:pointer; white-space:nowrap;
   transition:all .2s; letter-spacing:1px;
 }
 .ltab.active { border-color:var(--v); color:var(--v); box-shadow:0 0 8px var(--vg); }
 .ltab:hover:not(.active) { border-color:var(--g); color:var(--b); }
-.lcnt { background:var(--vd); color:var(--v); border-radius:10px; padding:1px 5px; font-size:.53rem; margin-left:4px; }
+.lcnt { background:var(--vd); color:var(--v); border-radius:10px; padding:1px 6px; font-size:.65rem; margin-left:4px; }
 
 .li {
   display:flex; gap:11px; background:var(--nc);
@@ -287,14 +398,14 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   transition:border-color .18s;
 }
 .li:hover { border-color:var(--vd); }
-.li img { width:50px; height:67px; object-fit:cover; border-radius:3px; flex-shrink:0; filter:saturate(.65); }
+.li img { width:54px; height:72px; object-fit:cover; border-radius:3px; flex-shrink:0; filter:saturate(.65); }
 .li-info { flex:1; min-width:0; }
-.li-title { font-size:.76rem; color:var(--b); margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.li-meta  { font-size:.58rem; color:var(--g); margin-bottom:7px; }
+.li-title { font-size:.84rem; color:var(--b); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.li-meta  { font-size:.7rem; color:var(--g); margin-bottom:7px; }
 .li-acts  { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
 .cat-sel {
   background:var(--n); border:1px solid var(--vd); color:var(--v);
-  font-family:var(--fb); font-size:.58rem; padding:4px 7px;
+  font-family:var(--fb); font-size:.68rem; padding:5px 8px;
   border-radius:3px; cursor:pointer;
 }
 
@@ -302,12 +413,12 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .stars { display:flex; align-items:center; gap:1px; margin-bottom:6px; flex-wrap:wrap; }
 .star {
   background:none; border:none; cursor:pointer;
-  font-size:.86rem; padding:0 1px; color:#2a2a2a;
+  font-size:1rem; padding:0 1px; color:#333;
   transition:color .1s,transform .1s; line-height:1;
 }
 .star.on { color:#ffd700; }
 .star:hover { transform:scale(1.2); }
-.s-lbl { font-family:var(--ft); font-size:.5rem; color:var(--g); margin-left:5px; letter-spacing:1px; }
+.s-lbl { font-family:var(--ft); font-size:.62rem; color:var(--g); margin-left:5px; letter-spacing:1px; }
 .s-lbl.rated { color:var(--v); }
 
 /* ── STATS ─────────────────────────────────────── */
@@ -315,16 +426,16 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   background:var(--nc); border:1px solid var(--vd);
   border-radius:6px; padding:13px 14px; margin-bottom:15px;
 }
-.stats-title { font-family:var(--ft); font-size:.5rem; letter-spacing:4px; color:var(--v); margin-bottom:11px; }
+.stats-title { font-family:var(--ft); font-size:.65rem; letter-spacing:4px; color:var(--v); margin-bottom:11px; }
 .stats-grid  { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
 .sbox { background:#050505; border:1px solid #141414; border-radius:4px; padding:9px; text-align:center; }
-.snum { font-family:var(--ft); font-size:1.3rem; color:var(--v); text-shadow:0 0 10px var(--vg); line-height:1; }
-.slbl { font-size:.48rem; color:var(--g); letter-spacing:2px; margin-top:3px; }
+.snum { font-family:var(--ft); font-size:1.35rem; color:var(--v); text-shadow:0 0 10px var(--vg); line-height:1; }
+.slbl { font-size:.62rem; color:var(--g); letter-spacing:2px; margin-top:4px; }
 .sbar-wrap { grid-column:1/-1; background:#050505; border:1px solid #141414; border-radius:4px; padding:9px; }
-.sbar-lbl  { font-size:.48rem; color:var(--g); letter-spacing:2px; margin-bottom:7px; }
+.sbar-lbl  { font-size:.62rem; color:var(--g); letter-spacing:2px; margin-bottom:7px; }
 .sbar-track { background:#111; border-radius:2px; height:4px; overflow:hidden; }
 .sbar-fill  { height:100%; background:linear-gradient(to right,var(--vd),var(--v)); border-radius:2px; box-shadow:0 0 5px var(--vg); transition:width .7s ease; min-width:0; }
-.sbar-vals  { display:flex; justify-content:space-between; margin-top:5px; font-size:.54rem; color:var(--g); }
+.sbar-vals  { display:flex; justify-content:space-between; margin-top:5px; font-size:.66rem; color:var(--g); }
 .sbar-vals strong { color:var(--v); }
 
 /* ── RESPALDO ───────────────────────────────────── */
@@ -334,13 +445,13 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   border-radius:6px; padding:12px 14px; margin-bottom:15px;
 }
 .backup-label {
-  font-family:var(--ft); font-size:.5rem; letter-spacing:3px;
+  font-family:var(--ft); font-size:.65rem; letter-spacing:3px;
   color:var(--g); flex:1; min-width:100%;
   margin-bottom:4px;
 }
 .btn-backup {
   background:transparent; border:1px solid var(--vd);
-  color:var(--v); font-family:var(--ft); font-size:.54rem;
+  color:var(--v); font-family:var(--ft); font-size:.65rem;
   letter-spacing:2px; padding:9px 14px; border-radius:4px;
   cursor:pointer; transition:all .2s; white-space:nowrap;
   text-shadow:0 0 5px var(--vg);
@@ -378,37 +489,37 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   padding:4px 10px; border-radius:4px;
 }
 .m-body { padding:14px; }
-.m-title { font-family:var(--ft); font-size:.9rem; color:var(--v); text-shadow:0 0 10px var(--vg); margin-bottom:5px; line-height:1.3; }
-.m-meta  { font-size:.65rem; color:var(--g); margin-bottom:11px; line-height:1.7; }
+.m-title { font-family:var(--ft); font-size:1rem; color:var(--v); text-shadow:0 0 10px var(--vg); margin-bottom:5px; line-height:1.3; }
+.m-meta  { font-size:.75rem; color:var(--g); margin-bottom:11px; line-height:1.8; }
 .m-meta strong { color:var(--b); }
 
 .m-stats { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:12px; }
-.mst   { background:#0d0d0d; border:1px solid #1a1a1a; border-radius:4px; padding:7px 9px; }
-.mst-l { font-size:.46rem; color:var(--g); letter-spacing:2px; margin-bottom:2px; }
-.mst-v { font-family:var(--ft); font-size:.65rem; color:var(--v); }
+.mst   { background:#0d0d0d; border:1px solid #1a1a1a; border-radius:4px; padding:8px 10px; }
+.mst-l { font-size:.6rem; color:var(--g); letter-spacing:2px; margin-bottom:3px; }
+.mst-v { font-family:var(--ft); font-size:.72rem; color:var(--v); }
 
 .m-tabs { display:flex; border-bottom:1px solid #1a1a1a; margin-bottom:11px; }
 .mtab {
   background:none; border:none; border-bottom:2px solid transparent;
-  color:var(--g); font-family:var(--ft); font-size:.5rem;
-  letter-spacing:2px; padding:8px 12px; cursor:pointer; transition:all .2s;
+  color:var(--g); font-family:var(--ft); font-size:.65rem;
+  letter-spacing:2px; padding:9px 14px; cursor:pointer; transition:all .2s;
 }
 .mtab.active { color:var(--v); border-bottom-color:var(--v); }
 .mpanel { display:none; }
 .mpanel.active { display:block; }
 
 .synopsis {
-  font-size:.7rem; line-height:1.8; color:#bbb;
+  font-size:.78rem; line-height:1.85; color:#ccc;
   border-left:2px solid var(--vd); padding-left:11px; margin-bottom:8px;
 }
 .btn-translate {
   background:none; border:1px solid #1a3a1a; color:#7fff50;
-  font-family:var(--ft); font-size:.48rem; letter-spacing:2px;
-  padding:5px 10px; border-radius:3px; cursor:pointer;
+  font-family:var(--ft); font-size:.6rem; letter-spacing:2px;
+  padding:6px 12px; border-radius:3px; cursor:pointer;
   transition:all .2s; margin-bottom:11px; display:inline-block;
 }
 .btn-translate:hover { background:#1a3a1a; border-color:#7fff50; box-shadow:0 0 8px rgba(127,255,80,.25); }
-.no-trailer { text-align:center; padding:22px 0; color:var(--g); font-size:.68rem; line-height:2; }
+.no-trailer { text-align:center; padding:22px 0; color:var(--g); font-size:.75rem; line-height:2; }
 .no-trailer a { color:var(--v); text-decoration:none; }
 .yt-w { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:4px; margin-bottom:8px; }
 .yt-w iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
@@ -416,7 +527,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .m-acts { display:flex; gap:7px; flex-wrap:wrap; margin-top:13px; }
 .btn-close {
   background:none; border:1px solid #666; color:#aaa;
-  font-family:var(--fb); font-size:.65rem; padding:9px 15px;
+  font-family:var(--fb); font-size:.75rem; padding:10px 16px;
   border-radius:4px; cursor:pointer; transition:all .2s;
 }
 .btn-close:hover { border-color:var(--b); color:var(--b); }
@@ -465,7 +576,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   text-shadow:0 0 10px var(--v), 0 0 24px var(--vg);
 }
 .footer-sub {
-  font-size:.52rem; color:#555; letter-spacing:3px;
+  font-size:.65rem; color:#777; letter-spacing:3px;
   margin-top:5px;
 }
 .footer-line {
@@ -692,9 +803,36 @@ async function apiFetch(url, ms=10000) {
 /* ════════════════════════════════════════
    HTML HELPERS
 ════════════════════════════════════════ */
-const htmlLoad = t  => `<div class="msg"><div class="bars"><span></span><span></span><span></span><span></span><span></span></div>${t}</div>`;
-const htmlErr  = (t,r) => `<div class="msg"><span class="ico">✕</span>${t}${r?`<br><br><button class="btn-n" style="font-size:.58rem" onclick="${r}">REINTENTAR</button>`:''}</div>`;
-const htmlEmpty = t => `<div class="msg"><span class="ico">◈</span>${t}</div>`;
+// Skeleton para grid de tarjetas (reemplaza el spinner)
+function skGrid(n=8) {
+  const card = `<div class="sk-card">
+    <div class="sk-img"></div>
+    <div class="sk-body">
+      <div class="sk-line w90"></div>
+      <div class="sk-line w70"></div>
+      <div class="sk-line w50"></div>
+      <div class="sk-btn"></div>
+    </div>
+  </div>`;
+  return `<div class="sk-grid">${card.repeat(n)}</div>`;
+}
+
+// Skeleton para lista de items
+function skLista(n=4) {
+  const item = `<div class="sk-li">
+    <div class="sk-li-img"></div>
+    <div class="sk-li-body">
+      <div class="sk-line w90"></div>
+      <div class="sk-line w60"></div>
+      <div class="sk-line w70"></div>
+    </div>
+  </div>`;
+  return item.repeat(n);
+}
+
+const htmlLoad  = t   => skGrid(8);          // Ya no usa barras — usa skeleton
+const htmlErr   = (t,r) => `<div class="msg"><span class="ico">✕</span>${t}${r?`<br><br><button class="btn-n" style="font-size:.58rem" onclick="${r}">REINTENTAR</button>`:''}</div>`;
+const htmlEmpty = t   => `<div class="msg"><span class="ico">◈</span>${t}</div>`;
 
 function errMsg(e) {
   if (e.name==='AbortError')              return 'La API tardó demasiado. Intenta de nuevo.';
@@ -997,16 +1135,35 @@ document.querySelectorAll('.mtab').forEach(btn => {
 function cargarTrailer() {
   if (!animeActual) return;
   const cont = document.getElementById('mTrailer');
+
   if (animeActual.trailerId) {
+    // Tráiler oficial registrado en Jikan — reproducir directo
     cont.innerHTML = `
       <div class="yt-w">
-        <iframe src="https://www.youtube.com/embed/${animeActual.trailerId}?rel=0"
-          allowfullscreen loading="lazy"></iframe>
+        <iframe
+          src="https://www.youtube.com/embed/${animeActual.trailerId}?rel=0&modestbranding=1"
+          allowfullscreen loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        </iframe>
       </div>
-      <p style="font-size:.58rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:4px">Tráiler oficial · YouTube</p>`;
+      <p style="font-size:.55rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:5px">
+        ▶ Tráiler oficial · YouTube
+      </p>`;
   } else {
-    cont.innerHTML = `<div class="no-trailer">📺 No hay tráiler registrado.<br>
-      <a href="https://www.youtube.com/results?search_query=${encodeURIComponent((animeActual.title||'')+' trailer oficial')}" target="_blank">▶ Buscar en YouTube →</a></div>`;
+    // Sin ID en Jikan — buscar el tráiler usando el modo de búsqueda del iframe de YouTube
+    // listType=search + list=QUERY incrusta los resultados de búsqueda directamente
+    const query = encodeURIComponent(`${animeActual.title} trailer oficial`);
+    cont.innerHTML = `
+      <div class="yt-w">
+        <iframe
+          src="https://www.youtube.com/embed?listType=search&list=${query}&modestbranding=1&rel=0"
+          allowfullscreen loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        </iframe>
+      </div>
+      <p style="font-size:.55rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:5px">
+        🔍 Resultados de búsqueda · "${animeActual.title} trailer"
+      </p>`;
   }
   trailerOk = true;
 }
@@ -1118,31 +1275,131 @@ function calificar(id, n) {
   }
 }
 
+// ── Sumar o restar episodio visto ──
+function cambiarEp(id, delta) {
+  const l = miLista(), i = l.findIndex(x => x.id === id);
+  if (i === -1) return;
+
+  const total    = l[i].episodes || 0;
+  const anterior = l[i].epVisto  || 0;
+  const nuevo    = Math.max(0, Math.min(total || 9999, anterior + delta));
+
+  if (nuevo === anterior) return; // Ya está en el límite
+  l[i].epVisto = nuevo;
+
+  // Si llegó al último episodio, mover a Terminado automáticamente
+  if (total > 0 && nuevo === total && l[i].categoria !== 'terminado') {
+    l[i].categoria = 'terminado';
+    // Poner la fecha de fin si está vacía
+    if (!l[i].fechaFin) l[i].fechaFin = new Date().toISOString().split('T')[0];
+    saveLista(l);
+    renderLista(); renderStats(); actualizarContadores();
+    toast(`¡Completado! "${l[i].title.substring(0,20)}..." → TERMINADO`);
+    return;
+  }
+
+  saveLista(l);
+
+  // Actualizar solo la UI sin re-renderizar toda la lista
+  const wrap = document.querySelector(`.ep-wrap[data-id="${id}"]`);
+  if (wrap) {
+    const lbl  = wrap.querySelector('.ep-label');
+    const fill = wrap.querySelector('.ep-bar-fill');
+    if (lbl)  lbl.innerHTML = `EP <strong>${nuevo}</strong>${total ? ' / '+total : ''}`;
+    if (fill && total) fill.style.width = Math.round(nuevo/total*100) + '%';
+  } else {
+    // Si no encontró el wrap (por cambio de estado), re-renderizar
+    renderLista();
+  }
+}
+
+// ── Guardar fecha de inicio o fin ──
+function guardarFecha(id, campo, valor) {
+  const l = miLista(), i = l.findIndex(x => x.id === id);
+  if (i !== -1) { l[i][campo] = valor; saveLista(l); }
+}
+
+// ── Guardar nota personal ──
+function guardarNota(id, texto) {
+  const l = miLista(), i = l.findIndex(x => x.id === id);
+  if (i !== -1) { l[i].nota = texto; saveLista(l); }
+}
+
 function renderLista() {
   const l    = miLista();
   const cont = document.getElementById('listCont');
   const fil  = catActiva==='all' ? l : l.filter(x => x.categoria===catActiva);
 
   if (!fil.length) {
-    cont.innerHTML = htmlEmpty(l.length===0 ? 'Tu lista está vacía.<br>Busca animes y agrégalos.' : 'No hay animes en esta categoría.');
+    cont.innerHTML = htmlEmpty(l.length===0
+      ? 'Tu lista está vacía.<br>Busca animes y agrégalos.'
+      : 'No hay animes en esta categoría.');
     actualizarContadores(); return;
   }
 
   cont.innerHTML = fil.map(a => {
+    const epTotal = a.episodes || 0;
+    const epVisto = a.epVisto  || 0;
+    const pctEp   = epTotal > 0 ? Math.min(100, Math.round(epVisto / epTotal * 100)) : 0;
+
+    // ── Progreso de episodios (solo si está viendo o terminado) ──
+    let epHTML = '';
+    if (a.categoria === 'viendo' || a.categoria === 'terminado') {
+      epHTML = `
+        <div class="ep-wrap" data-id="${a.id}">
+          <button class="ep-btn" onclick="cambiarEp(${a.id},-1)" title="Episodio anterior">−</button>
+          <button class="ep-btn" onclick="cambiarEp(${a.id},1)"  title="Siguiente episodio">+</button>
+          <span class="ep-label">EP <strong>${epVisto}</strong>${epTotal ? ' / '+epTotal : ''}</span>
+          ${epTotal ? `<div class="ep-bar-track"><div class="ep-bar-fill" style="width:${pctEp}%"></div></div>` : ''}
+        </div>`;
+    }
+
+    // ── Estrellas (solo terminado) ──
     let starsH = '';
-    if (a.categoria==='terminado') {
-      const c = a.miCal||0;
+    if (a.categoria === 'terminado') {
+      const c = a.miCal || 0;
       starsH = `<div class="stars" data-id="${a.id}">
-        ${Array.from({length:10},(_,i)=>`<button class="star${i<c?' on':''}" onclick="calificar(${a.id},${i+1})" title="${i+1}/10">★</button>`).join('')}
-        <span class="s-lbl${c>0?' rated':''}">${c>0?c+'/10':'CALIFICAR'}</span>
+        ${Array.from({length:10}, (_,i) =>
+          `<button class="star${i<c?' on':''}" onclick="calificar(${a.id},${i+1})" title="${i+1}/10">★</button>`
+        ).join('')}
+        <span class="s-lbl${c>0?' rated':''}">${c>0 ? c+'/10' : 'CALIFICAR'}</span>
       </div>`;
     }
+
+    // ── Fechas (inicio y fin) ──
+    const datesHTML = `
+      <div class="dates-wrap">
+        <div class="date-field">
+          <span class="date-lbl">FECHA INICIO</span>
+          <input class="date-inp" type="date" value="${a.fechaInicio||''}"
+            onchange="guardarFecha(${a.id},'fechaInicio',this.value)">
+        </div>
+        ${a.categoria === 'terminado' ? `
+        <div class="date-field">
+          <span class="date-lbl">FECHA FIN</span>
+          <input class="date-inp" type="date" value="${a.fechaFin||''}"
+            onchange="guardarFecha(${a.id},'fechaFin',this.value)">
+        </div>` : ''}
+      </div>`;
+
+    // ── Notas personales ──
+    const notasHTML = `
+      <div class="notes-wrap">
+        <div class="notes-lbl">MIS NOTAS</div>
+        <textarea class="notes-inp"
+          placeholder="Escribe tu opinión, recomendaciones..."
+          onchange="guardarNota(${a.id},this.value)">${a.nota||''}</textarea>
+      </div>`;
+
     return `<div class="li">
       <img src="${a.image}" alt="${(a.title||'').replace(/"/g,'')}" loading="lazy" onerror="this.style.display='none'">
       <div class="li-info">
         <div class="li-title">${a.title||'—'}</div>
         <div class="li-meta">${a.type||'?'} · ${a.episodes?a.episodes+' eps':'?? eps'}${a.score?' · ★ '+a.score:''}</div>
+        ${epHTML}
         ${starsH}
+        ${datesHTML}
+        ${notasHTML}
         <div class="li-acts">
           <select class="cat-sel" onchange="cambiarCat(${a.id},this.value)">
             <option value="porver"    ${a.categoria==='porver'   ?'selected':''}>Por ver</option>
