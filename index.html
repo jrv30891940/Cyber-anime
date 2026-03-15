@@ -85,13 +85,13 @@ header {
 }
 .nav-tabs::-webkit-scrollbar { display:none; }
 .tab-btn {
-  flex:1; min-width:78px; padding:13px 6px;
+  flex:1; min-width:0; padding:12px 4px;
   background:none; border:none; border-bottom:2px solid transparent;
-  color:var(--g); font-family:var(--ft); font-size:.53rem;
-  letter-spacing:2px; cursor:pointer; transition:all .2s; white-space:nowrap;
+  color:#888; font-family:var(--ft); font-size:.48rem;
+  letter-spacing:1.5px; cursor:pointer; transition:all .2s; white-space:nowrap;
 }
 .tab-btn.active { color:var(--v); border-bottom-color:var(--v); text-shadow:0 0 8px var(--vg); }
-.tab-btn:hover:not(.active) { color:var(--b); border-bottom-color:var(--g); }
+.tab-btn:hover:not(.active) { color:#ccc; border-bottom-color:#555; }
 
 /* ── MAIN ──────────────────────────────────────── */
 main { max-width:900px; margin:0 auto; padding:14px; }
@@ -399,8 +399,15 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 
 .synopsis {
   font-size:.7rem; line-height:1.8; color:#bbb;
-  border-left:2px solid var(--vd); padding-left:11px; margin-bottom:11px;
+  border-left:2px solid var(--vd); padding-left:11px; margin-bottom:8px;
 }
+.btn-translate {
+  background:none; border:1px solid #1a3a1a; color:#7fff50;
+  font-family:var(--ft); font-size:.48rem; letter-spacing:2px;
+  padding:5px 10px; border-radius:3px; cursor:pointer;
+  transition:all .2s; margin-bottom:11px; display:inline-block;
+}
+.btn-translate:hover { background:#1a3a1a; border-color:#7fff50; box-shadow:0 0 8px rgba(127,255,80,.25); }
 .no-trailer { text-align:center; padding:22px 0; color:var(--g); font-size:.68rem; line-height:2; }
 .no-trailer a { color:var(--v); text-decoration:none; }
 .yt-w { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:4px; margin-bottom:8px; }
@@ -408,7 +415,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 
 .m-acts { display:flex; gap:7px; flex-wrap:wrap; margin-top:13px; }
 .btn-close {
-  background:none; border:1px solid var(--g); color:var(--g);
+  background:none; border:1px solid #666; color:#aaa;
   font-family:var(--fb); font-size:.65rem; padding:9px 15px;
   border-radius:4px; cursor:pointer; transition:all .2s;
 }
@@ -446,6 +453,27 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   75%{clip-path:inset(70% 0 10% 0);transform:translate(-1px)}
 }
 
+/* ── FOOTER ─────────────────────────────────────── */
+.footer {
+  text-align:center; padding:28px 16px 22px;
+  border-top:1px solid var(--nb);
+  margin-top:10px;
+}
+.footer-brand {
+  font-family:var(--ft); font-size:.7rem; font-weight:900;
+  color:var(--v); letter-spacing:4px;
+  text-shadow:0 0 10px var(--v), 0 0 24px var(--vg);
+}
+.footer-sub {
+  font-size:.52rem; color:#555; letter-spacing:3px;
+  margin-top:5px;
+}
+.footer-line {
+  width:40px; height:1px;
+  background:linear-gradient(to right, transparent, var(--vd), transparent);
+  margin:10px auto 0;
+}
+
 /* ── RESPONSIVE ────────────────────────────────── */
 @media(max-width:380px) {
   .grid { grid-template-columns:repeat(2,1fr); }
@@ -459,7 +487,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 <!-- HEADER -->
 <header>
   <div class="h-inner">
-    <a class="logo" href="#">CYBER//ANIME<small>POWERED BY JIKAN API</small></a>
+    <a class="logo" href="#">CYBER//ANIME<small>YOUR ANIME DATABASE</small></a>
     <div class="live-dot">LIVE</div>
   </div>
 </header>
@@ -468,8 +496,8 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 <nav class="nav-tabs">
   <button class="tab-btn active" data-tab="s-search">[ BUSCAR ]</button>
   <button class="tab-btn"        data-tab="s-top"   >[ TOP ]</button>
-  <button class="tab-btn"        data-tab="s-cal"   >[ CALENDARIO ]</button>
-  <button class="tab-btn"        data-tab="s-list"  >[ MI LISTA ]</button>
+  <button class="tab-btn"        data-tab="s-cal"   >[ CAL ]</button>
+  <button class="tab-btn"        data-tab="s-list"  >[ LISTA ]</button>
 </nav>
 
 <main>
@@ -557,7 +585,12 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 
 </main>
 
-<!-- MODAL -->
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">CYBER//ANIME</div>
+  <div class="footer-sub">© 2026 · THEBRODERS · ALL RIGHTS RESERVED</div>
+  <div class="footer-line"></div>
+</footer>
 <div id="modalBg" class="modal-bg">
   <div class="modal">
     <div class="m-img-w">
@@ -574,6 +607,7 @@ main { max-width:900px; margin:0 auto; padding:14px; }
       </div>
       <div id="mp-syn" class="mpanel active">
         <p id="mSyn" class="synopsis">—</p>
+        <button id="btnTraducir" class="btn-translate">🌐 TRADUCIR AL ESPAÑOL →</button>
       </div>
       <div id="mp-tr" class="mpanel">
         <div id="mTrailer"></div>
@@ -904,7 +938,8 @@ async function abrirModal(id) {
       source:    a.source||'?',
       rank:      a.rank,
       synopsis:  a.synopsis||'Sin sinopsis disponible.',
-      trailerId: a.trailer?.youtube_id||null,
+      // Extraer ID de YouTube desde youtube_id, embed_url o url (Jikan puede usar cualquiera)
+      trailerId: extraerYouTubeId(a.trailer),
     };
 
     const ESTADO = {'Finished Airing':'Finalizado','Currently Airing':'En emisión ▶','Not yet aired':'Próximamente'};
@@ -1256,6 +1291,42 @@ function cargarRespaldo(event) {
 }
 
 /* ════════════════════════════════════════
+   EXTRAER ID DE YOUTUBE
+   Jikan puede devolver youtube_id, embed_url o url
+════════════════════════════════════════ */
+function extraerYouTubeId(trailer) {
+  if (!trailer) return null;
+
+  // Caso 1: campo youtube_id directo y no vacío
+  if (trailer.youtube_id && trailer.youtube_id.trim() !== '') {
+    return trailer.youtube_id.trim();
+  }
+
+  // Caso 2: sacar el ID del embed_url o url con regex
+  const fuente = trailer.embed_url || trailer.url || '';
+  if (!fuente) return null;
+
+  // Patrones posibles de URL de YouTube
+  const match = fuente.match(
+    /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
+}
+
+/* ════════════════════════════════════════
+   TRADUCIR SINOPSIS
+════════════════════════════════════════ */
+function traducirSinopsis() {
+  const texto = document.getElementById('mSyn').textContent.trim();
+  if (!texto || texto === '—' || texto === 'Sin sinopsis disponible.') {
+    toast('No hay sinopsis para traducir.');
+    return;
+  }
+  const url = `https://translate.google.com/?sl=en&tl=es&text=${encodeURIComponent(texto)}&op=translate`;
+  window.open(url, '_blank');
+}
+
+/* ════════════════════════════════════════
    TOAST
 ════════════════════════════════════════ */
 function toast(msg) {
@@ -1269,6 +1340,9 @@ function toast(msg) {
 /* ════════════════════════════════════════
    INICIO
 ════════════════════════════════════════ */
+// Conectar botón traducir mediante addEventListener (más seguro que onclick inline)
+document.getElementById('btnTraducir').addEventListener('click', traducirSinopsis);
+
 buildWeek();
 cargarDia(diaActivo);
 cargarTop();
