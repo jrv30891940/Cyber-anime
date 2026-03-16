@@ -2114,7 +2114,7 @@ function mostrarIframeYT(ytId, caption) {
   cont.innerHTML = `
     <div class="yt-w">
       <iframe
-        src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1"
+        src="${ytId}&rel=0&modestbranding=1"
         allowfullscreen
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
       </iframe>
@@ -2644,24 +2644,11 @@ function cargarRespaldo(event) {
 function extraerYouTubeId(trailer) {
   if (!trailer) return null;
 
-  // Caso 1: youtube_id directo y limpio
-  if (trailer.youtube_id && trailer.youtube_id.trim() !== '') {
-    return trailer.youtube_id.trim();
-  }
-
-  // Caso 2: extraer solo el ID de 11 caracteres de embed_url o url
-  // Jikan devuelve cosas como:
-  //   https://www.youtube.com/embed/ABC123xyz12?autoplay=1&enablejsapi=1
-  //   https://youtu.be/ABC123xyz12
-  //   https://www.youtube.com/watch?v=ABC123xyz12
-  const fuente = trailer.embed_url || trailer.url || '';
+  const fuente = trailer.embed_url || '';
   if (!fuente) return null;
 
-  const match = fuente.match(
-    /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
   // Devolver SOLO el ID, nunca la URL completa
-  return match ? match[1] : null;
+  return fuente;
 }
 
 /* ════════════════════════════════════════
