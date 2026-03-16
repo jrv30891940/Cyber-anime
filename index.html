@@ -245,15 +245,10 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   animation:sk-pulse 1.4s ease-in-out infinite;
 }
 .sk-body { padding:8px; display:flex; flex-direction:column; gap:6px; }
-.sk-line {
-  height:8px; border-radius:3px;
-  background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
-  background-size:200% 100%;
-  animation:sk-slide 1.6s linear infinite;
-}
-.sk-line.w70  { width:70%; }
-.sk-line.w50  { width:50%; }
-.sk-line.w90  { width:90%; }
+.sk-line { height:8px; border-radius:3px; background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d); background-size:200% 100%; animation:sk-slide 1.6s linear infinite; }
+.sk-line.w70 { width:70%; }
+.sk-line.w50 { width:50%; }
+.sk-line.w90 { width:90%; }
 .sk-btn {
   height:22px; border-radius:3px; margin-top:2px;
   background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
@@ -264,20 +259,6 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   0%   { background-position:200% 0; }
   100% { background-position:-200% 0; }
 }
-
-/* Skeleton para item de lista */
-.sk-li {
-  display:flex; gap:11px; background:var(--nc);
-  border:1px solid var(--nb); border-radius:6px;
-  padding:10px; margin-bottom:9px;
-}
-.sk-li-img {
-  width:50px; height:67px; border-radius:3px; flex-shrink:0;
-  background:linear-gradient(90deg,#0d1a0d,#1a3a1a,#0d1a0d);
-  background-size:200% 100%;
-  animation:sk-slide 1.6s linear infinite;
-}
-.sk-li-body { flex:1; display:flex; flex-direction:column; gap:7px; padding-top:4px; }
 
 /* ── PROGRESO DE EPISODIOS ─────────────────────── */
 .ep-wrap {
@@ -951,9 +932,403 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   .m-acts { flex-direction:column; }
   .m-acts .btn-n,.m-acts .btn-close { width:100%; text-align:center; }
 }
+
+/* ══════════════════════════════════════════
+   PANTALLA DE INTRO / BOOT
+══════════════════════════════════════════ */
+#bootScreen {
+  position:fixed; inset:0; background:#000; z-index:9999;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  overflow:hidden;
+  background-image:repeating-linear-gradient(
+    0deg,transparent,transparent 3px,
+    rgba(57,255,20,.04) 3px,rgba(57,255,20,.04) 4px
+  );
+}
+/* Partículas de fondo animadas */
+#bootScreen::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(57,255,20,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 50%, rgba(57,255,20,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 50%, rgba(57,255,20,.04) 0%, transparent 60%);
+  animation:bootBgPulse 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes bootBgPulse {
+  0%,100% { opacity:.5; }
+  50%      { opacity:1; }
+}
+/* Línea horizontal que barre la pantalla */
+#bootScreen::after {
+  content:''; position:absolute; left:0; right:0; height:1px;
+  background:linear-gradient(to right,transparent,var(--v),transparent);
+  box-shadow:0 0 12px var(--v);
+  animation:bootScan 2.5s linear infinite;
+  top:0;
+}
+@keyframes bootScan {
+  0%   { top:0%; opacity:0; }
+  10%  { opacity:1; }
+  90%  { opacity:1; }
+  100% { top:100%; opacity:0; }
+}
+
+#bootScreen.fade-out { animation:bootFade .9s ease forwards; }
+@keyframes bootFade { to { opacity:0; pointer-events:none; } }
+
+/* Logo principal */
+.boot-logo {
+  font-family:var(--ft); font-weight:900;
+  font-size:clamp(1.8rem,9vw,3rem);
+  color:var(--v); letter-spacing:6px; text-align:center;
+  text-shadow:0 0 20px var(--v),0 0 60px var(--vg),0 0 100px rgba(57,255,20,.2);
+  min-height:3.5rem; position:relative; z-index:2;
+  /* Glitch continuo en el logo */
+  animation:bootLogoGlitch 4s steps(1) infinite;
+}
+@keyframes bootLogoGlitch {
+  0%,94%,100% { text-shadow:0 0 20px var(--v),0 0 60px var(--vg); transform:none; }
+  95%  { text-shadow:-2px 0 #ff0040,2px 0 #00ffff; transform:translateX(-2px); }
+  96%  { text-shadow:2px 0 #ff0040,-2px 0 #00ffff; transform:translateX(2px); }
+  97%  { text-shadow:-1px 0 #ff0040,1px 0 #00ffff; transform:translateX(0); }
+}
+.boot-logo .cursor {
+  display:inline-block; width:3px; height:.9em;
+  background:var(--v); margin-left:4px; vertical-align:middle;
+  animation:blink .6s step-end infinite;
+  box-shadow:0 0 8px var(--v);
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Subtítulo */
+.boot-tagline {
+  font-family:var(--ft); font-size:.62rem; letter-spacing:8px;
+  color:var(--g); margin-top:8px; min-height:1.4em;
+  text-align:center; position:relative; z-index:2;
+  opacity:0; transition:opacity .5s ease;
+}
+.boot-tagline.visible { opacity:1; }
+
+/* Líneas decorativas a los lados del logo */
+.boot-deco {
+  display:flex; align-items:center; gap:14px;
+  margin:14px 0 0; position:relative; z-index:2;
+  width:min(340px,88vw);
+}
+.boot-deco-line {
+  flex:1; height:1px;
+  background:linear-gradient(to right,transparent,var(--vd));
+}
+.boot-deco-line.right {
+  background:linear-gradient(to left,transparent,var(--vd));
+}
+.boot-deco-txt {
+  font-family:var(--ft); font-size:.42rem; letter-spacing:3px; color:var(--vd);
+  white-space:nowrap;
+}
+
+/* Terminal */
+.boot-terminal {
+  margin-top:28px; width:min(340px,88vw);
+  background:rgba(0,5,0,.8); border:1px solid var(--vd);
+  border-radius:6px; padding:14px 16px;
+  box-shadow:0 0 30px var(--vg), inset 0 0 20px rgba(57,255,20,.03);
+  position:relative; z-index:2;
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+.boot-terminal.visible { opacity:1; transform:translateY(0); }
+
+.boot-term-header {
+  display:flex; align-items:center; gap:6px;
+  border-bottom:1px solid #111; padding-bottom:8px; margin-bottom:10px;
+}
+.boot-term-dot {
+  width:8px; height:8px; border-radius:50%;
+}
+.boot-term-dot.r { background:#ff5f57; }
+.boot-term-dot.y { background:#febc2e; }
+.boot-term-dot.g { background:var(--v); box-shadow:0 0 6px var(--v); }
+.boot-term-title {
+  font-family:var(--ft); font-size:.48rem; color:var(--g);
+  letter-spacing:3px; margin-left:4px;
+}
+
+.boot-term-line {
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem; color:var(--g); margin-bottom:5px; letter-spacing:.5px;
+}
+.boot-term-line .lbl { color:#444; margin-right:6px; }
+.boot-term-line .val { color:var(--v); }
+.boot-term-line .dim { color:#333; }
+
+.boot-pass-row {
+  display:flex; align-items:center; gap:8px; margin:8px 0;
+}
+.boot-pass-lbl { font-size:.65rem; color:var(--g); letter-spacing:1px; white-space:nowrap; font-family:'Share Tech Mono',monospace; }
+.boot-pass-dots {
+  font-size:.75rem; color:var(--v); letter-spacing:5px;
+  text-shadow:0 0 8px var(--vg); min-width:80px;
+  font-family:'Share Tech Mono',monospace;
+}
+
+.boot-divider { height:1px; background:#111; margin:8px 0; }
+
+.boot-status {
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem; letter-spacing:2px; min-height:1.4em;
+  transition:color .3s;
+}
+.boot-status.wait { color:#555; }
+.boot-status.ok   { color:var(--v); text-shadow:0 0 8px var(--vg); }
+.boot-status.err  { color:#f33; }
+
+/* Barra de progreso de carga */
+.boot-bar-wrap { margin-top:10px; }
+.boot-bar-lbl {
+  display:flex; justify-content:space-between;
+  font-family:var(--ft); font-size:.45rem; color:var(--g);
+  margin-bottom:5px; letter-spacing:2px;
+}
+.boot-bar-lbl span { color:var(--v); }
+.boot-bar-track {
+  background:#0a0a0a; border-radius:2px; height:4px;
+  overflow:hidden; border:1px solid #111;
+}
+.boot-bar-fill {
+  height:100%; width:0%; border-radius:2px;
+  background:linear-gradient(to right,var(--vd),var(--v));
+  box-shadow:0 0 8px var(--vg);
+  transition:width .08s linear;
+}
+
+/* Módulos de carga */
+.boot-modules {
+  margin-top:8px; display:flex; flex-direction:column; gap:3px;
+}
+.boot-module {
+  display:flex; align-items:center; gap:8px;
+  font-family:'Share Tech Mono',monospace; font-size:.58rem; color:#333;
+  transition:color .2s;
+}
+.boot-module.done  { color:#555; }
+.boot-module.done .bm-icon { color:var(--v); }
+.boot-module.active { color:var(--g); }
+.boot-module.active .bm-icon { animation:blink .5s step-end infinite; color:var(--v); }
+.bm-icon { width:12px; text-align:center; font-size:.6rem; }
+
+/* ══════════════════════════════════════════
+   GENERADOR DE CARTAS DE ANIME
+══════════════════════════════════════════ */
+.card-gen-bg {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.95); z-index:300;
+  overflow-y:auto; padding:14px;
+}
+.card-gen-bg.open { display:block; }
+.card-gen-box {
+  max-width:540px; margin:0 auto;
+  background:var(--nc); border:1px solid var(--v);
+  border-radius:8px; padding:16px;
+  box-shadow:0 0 40px var(--vg);
+}
+.card-gen-title {
+  font-family:var(--ft); font-size:.78rem; color:var(--v);
+  letter-spacing:3px; margin-bottom:4px;
+  text-shadow:0 0 10px var(--vg);
+}
+.card-gen-sub { font-size:.65rem; color:var(--g); margin-bottom:14px; }
+
+/* Grid de selección de animes */
+.card-sel-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+  gap:8px; margin-bottom:14px; max-height:260px; overflow-y:auto;
+  padding-right:4px;
+}
+.card-sel-item {
+  position:relative; cursor:pointer; border-radius:5px; overflow:hidden;
+  border:2px solid transparent; transition:border-color .18s;
+}
+.card-sel-item.selected { border-color:var(--v); box-shadow:0 0 10px var(--vg); }
+.card-sel-item img {
+  width:100%; aspect-ratio:2/3; object-fit:cover; display:block;
+  filter:saturate(.7);
+}
+.card-sel-item.selected img { filter:saturate(1); }
+.card-sel-check {
+  position:absolute; top:4px; right:4px;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--v); color:#000;
+  font-size:.6rem; font-weight:900;
+  display:none; align-items:center; justify-content:center;
+}
+.card-sel-item.selected .card-sel-check { display:flex; }
+.card-sel-name {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(to top,rgba(0,0,0,.9),transparent);
+  font-size:.5rem; color:var(--b); padding:4px 4px 3px;
+  line-height:1.2;
+  display:-webkit-box; -webkit-line-clamp:2;
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+.card-gen-actions {
+  display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+}
+.card-gen-count {
+  font-size:.65rem; color:var(--g); flex:1; letter-spacing:1px;
+}
+.card-gen-count strong { color:var(--v); }
+
+/* ── LA CARTA EN SÍ (canvas virtual) ── */
+.anime-card-render {
+  width:300px; background:#000; border-radius:10px;
+  overflow:hidden; position:relative;
+  box-shadow:0 0 30px var(--vg);
+  font-family:var(--ft);
+  /* Solo se muestra para exportar — fuera de pantalla */
+  position:absolute; top:-9999px; left:-9999px;
+}
+.acr-img {
+  width:100%; aspect-ratio:2/3; object-fit:cover;
+  filter:saturate(.8) contrast(1.1);
+}
+.acr-overlay {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(to top,#000 0%,rgba(0,0,0,.85) 40%,transparent 100%);
+  padding:12px;
+}
+.acr-badge {
+  display:inline-block; background:var(--v); color:#000;
+  font-size:.48rem; font-weight:900; letter-spacing:2px;
+  padding:2px 7px; border-radius:2px; margin-bottom:6px;
+}
+.acr-title {
+  font-size:.75rem; color:var(--v); text-shadow:0 0 8px var(--vg);
+  line-height:1.3; margin-bottom:4px;
+}
+.acr-meta { font-size:.55rem; color:#aaa; margin-bottom:6px; letter-spacing:.5px; }
+.acr-genres {
+  display:flex; flex-wrap:wrap; gap:3px; margin-bottom:7px;
+}
+.acr-genre-tag {
+  background:rgba(57,255,20,.1); border:1px solid var(--vd);
+  color:var(--v); font-size:.45rem; padding:2px 5px; border-radius:2px;
+  letter-spacing:.5px;
+}
+.acr-synopsis {
+  font-family:'Share Tech Mono',monospace;
+  font-size:.52rem; color:#ccc; line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:4;
+  -webkit-box-orient:vertical; overflow:hidden;
+  border-left:1px solid var(--vd); padding-left:6px;
+  margin-bottom:8px;
+}
+.acr-score-row {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.acr-score {
+  font-size:.8rem; color:#ffd700;
+  text-shadow:0 0 8px rgba(255,215,0,.5);
+}
+.acr-firma {
+  font-size:.42rem; color:#444; letter-spacing:2px;
+}
+/* Bordes neón de la carta */
+.acr-border-top {
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(to right,transparent,var(--v),transparent);
+  box-shadow:0 0 10px var(--v);
+}
+.acr-border-bot {
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(to right,transparent,var(--v),transparent);
+  box-shadow:0 0 10px var(--v);
+}
+
+/* ══════════════════════════════════════════
+   MULTI-SELECT EN MI LISTA
+══════════════════════════════════════════ */
+.ms-toolbar {
+  display:none; /* Oculto hasta activar modo selección */
+  align-items:center; gap:8px; flex-wrap:wrap;
+  background:#0a0a0a; border:1px solid var(--vd);
+  border-radius:6px; padding:10px 12px; margin-bottom:12px;
+}
+.ms-toolbar.active { display:flex; }
+.ms-count { font-size:.68rem; color:var(--g); flex:1; letter-spacing:1px; }
+.ms-count strong { color:var(--v); }
+.btn-ms-del {
+  background:none; border:1px solid #500; color:#f55;
+  font-family:var(--ft); font-size:.58rem; letter-spacing:2px;
+  padding:7px 12px; border-radius:4px; cursor:pointer; transition:all .2s;
+}
+.btn-ms-del:hover:not(:disabled) { background:#f33; color:#000; border-color:#f33; }
+.btn-ms-del:disabled { opacity:.3; cursor:not-allowed; }
+.btn-ms-cancel {
+  background:none; border:1px solid #333; color:var(--g);
+  font-family:var(--ft); font-size:.58rem; letter-spacing:2px;
+  padding:7px 12px; border-radius:4px; cursor:pointer; transition:all .2s;
+}
+.btn-ms-cancel:hover { border-color:var(--g); color:var(--b); }
+
+/* Checkbox de cada item */
+.li-check {
+  display:none; /* Solo visible en modo selección */
+  width:20px; height:20px; flex-shrink:0;
+  border:2px solid #333; border-radius:4px;
+  cursor:pointer; transition:all .18s;
+  align-items:center; justify-content:center;
+  align-self:center;
+}
+.ms-mode .li-check { display:flex; }
+.li-check.checked { background:var(--v); border-color:var(--v); }
+.li-check.checked::after { content:'✓'; font-size:.7rem; color:#000; font-weight:900; }
 </style>
 </head>
 <body>
+
+<!-- PANTALLA DE INTRO -->
+<div id="bootScreen">
+  <div class="boot-logo" id="bootLogo"><span class="cursor"></span></div>
+  <div class="boot-tagline" id="bootTagline">YOUR ANIME DATABASE</div>
+  <div class="boot-deco">
+    <div class="boot-deco-line"></div>
+    <div class="boot-deco-txt">THEBRODERS · 2026</div>
+    <div class="boot-deco-line right"></div>
+  </div>
+  <div class="boot-terminal" id="bootTerminal">
+    <div class="boot-term-header">
+      <div class="boot-term-dot r"></div>
+      <div class="boot-term-dot y"></div>
+      <div class="boot-term-dot g"></div>
+      <span class="boot-term-title">CYBER//ANIME · TERMINAL v2.0</span>
+    </div>
+    <div class="boot-term-line"><span class="lbl">SYS:</span><span class="val">CYBER//ANIME OS v2.0.26</span></div>
+    <div class="boot-term-line"><span class="lbl">USR:</span><span class="val">THEBRODERS</span> <span class="dim">· privilegios root</span></div>
+    <div class="boot-divider"></div>
+    <div class="boot-pass-row">
+      <span class="boot-pass-lbl">CONTRASEÑA ▶</span>
+      <span class="boot-pass-dots" id="bootDots"></span>
+    </div>
+    <div class="boot-divider"></div>
+    <div class="boot-status wait" id="bootStatus">ESPERANDO AUTENTICACIÓN...</div>
+    <div class="boot-bar-wrap" id="bootBarWrap" style="display:none">
+      <div class="boot-bar-lbl">
+        <span>INICIALIZANDO SISTEMA</span>
+        <span id="bootPct">0%</span>
+      </div>
+      <div class="boot-bar-track"><div class="boot-bar-fill" id="bootBar"></div></div>
+    </div>
+    <div class="boot-modules" id="bootModules" style="display:none">
+      <div class="boot-module" id="bm0"><span class="bm-icon">◈</span>Cargando base de datos Jikan...</div>
+      <div class="boot-module" id="bm1"><span class="bm-icon">◈</span>Restaurando tu lista de animes...</div>
+      <div class="boot-module" id="bm2"><span class="bm-icon">◈</span>Sincronizando calendario...</div>
+      <div class="boot-module" id="bm3"><span class="bm-icon">◈</span>Activando interfaz neón...</div>
+    </div>
+  </div>
+</div>
 
 <!-- HEADER -->
 <header>
@@ -1057,14 +1432,21 @@ main { max-width:900px; margin:0 auto; padding:14px; }
       <input id="fileInput" type="file" accept=".json" style="display:none" onchange="cargarRespaldo(event)">
     </div>
 
-    <!-- Botón de prueba del Wrapped (visible siempre para testear) -->
-    <div style="margin-bottom:14px">
-      <button class="btn-wrapped" onclick="abrirWrapped()" style="width:100%">
-        🎄 PROBAR WRAPPED — VISTA PREVIA
+    <!-- Acciones de lista -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="btn-n" style="font-size:.58rem;padding:8px 12px" onclick="toggleModoSeleccion()">
+        ☑ SELECCIÓN MÚLTIPLE
       </button>
-      <p style="font-size:.6rem;color:var(--g);text-align:center;margin-top:6px;letter-spacing:1px">
-        El botón real solo aparece del 25 al 31 de diciembre
-      </p>
+      <button class="btn-n" style="font-size:.58rem;padding:8px 12px;border-color:var(--vd);color:var(--g)" onclick="abrirGeneradorCartas()">
+        🃏 GENERAR CARTAS
+      </button>
+    </div>
+
+    <!-- Toolbar de multi-selección -->
+    <div id="msToolbar" class="ms-toolbar">
+      <span class="ms-count"><strong id="msCount">0</strong> seleccionados</span>
+      <button class="btn-ms-del" id="msDelBtn" disabled onclick="eliminarSeleccionados()">🗑 ELIMINAR</button>
+      <button class="btn-ms-cancel" onclick="toggleModoSeleccion()">CANCELAR</button>
     </div>
 
     <!-- Buscador dentro de Mi Lista -->
@@ -1087,6 +1469,24 @@ main { max-width:900px; margin:0 auto; padding:14px; }
   <div class="footer-sub">© 2026 · THEBRODERS · ALL RIGHTS RESERVED</div>
   <div class="footer-line"></div>
 </footer>
+
+<!-- GENERADOR DE CARTAS -->
+<div id="cardGenBg" class="card-gen-bg">
+  <div class="card-gen-box">
+    <div class="card-gen-title">🃏 GENERADOR DE CARTAS</div>
+    <div class="card-gen-sub">Selecciona los animes para crear sus cartas coleccionables</div>
+    <div id="cardSelGrid" class="card-sel-grid"></div>
+    <div class="card-gen-actions">
+      <span class="card-gen-count"><strong id="cardSelCount">0</strong> seleccionados</span>
+      <button class="btn-n" style="font-size:.6rem;padding:9px 14px" onclick="seleccionarTodasCartas()">TODO</button>
+      <button class="btn-n" style="font-size:.6rem;padding:9px 14px" id="btnGenerarCartas" onclick="generarCartas()">⬇ GENERAR</button>
+      <button class="btn-close" onclick="cerrarGeneradorCartas()">[ CERRAR ]</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contenedor oculto donde se renderizan las cartas para exportar -->
+<div id="cardRenderZone" style="position:fixed;top:-9999px;left:-9999px;pointer-events:none"></div>
 
 <!-- WRAPPED — MODO HISTORIAS -->
 <div id="wrappedBg" class="wrapped-bg">
@@ -1309,7 +1709,7 @@ async function apiFetch(url, ms=10000) {
 /* ════════════════════════════════════════
    HTML HELPERS
 ════════════════════════════════════════ */
-// Skeleton para grid de tarjetas (reemplaza el spinner)
+// Skeleton para grid de tarjetas
 function skGrid(n=8) {
   const card = `<div class="sk-card">
     <div class="sk-img"></div>
@@ -1323,20 +1723,7 @@ function skGrid(n=8) {
   return `<div class="sk-grid">${card.repeat(n)}</div>`;
 }
 
-// Skeleton para lista de items
-function skLista(n=4) {
-  const item = `<div class="sk-li">
-    <div class="sk-li-img"></div>
-    <div class="sk-li-body">
-      <div class="sk-line w90"></div>
-      <div class="sk-line w60"></div>
-      <div class="sk-line w70"></div>
-    </div>
-  </div>`;
-  return item.repeat(n);
-}
-
-const htmlLoad  = t   => skGrid(8);          // Ya no usa barras — usa skeleton
+const htmlLoad  = ()  => skGrid(8);
 const htmlErr   = (t,r) => `<div class="msg"><span class="ico">✕</span>${t}${r?`<br><br><button class="btn-n" style="font-size:.58rem" onclick="${r}">REINTENTAR</button>`:''}</div>`;
 const htmlEmpty = t   => `<div class="msg"><span class="ico">◈</span>${t}</div>`;
 
@@ -1638,41 +2025,102 @@ document.querySelectorAll('.mtab').forEach(btn => {
   });
 });
 
-function cargarTrailer() {
+async function cargarTrailer() {
   if (!animeActual) return;
   const cont = document.getElementById('mTrailer');
 
-  if (animeActual.trailerId !== '') {
-    // Tráiler oficial registrado en Jikan — reproducir directo
-    cont.innerHTML = `
-      <div class="yt-w">
-        <iframe
-          src="${animeActual.trailerId}&rel=0&modestbranding=1"
-          allowfullscreen loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-        </iframe>
+  // Mostrar cargando mientras busca
+  cont.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;
+      height:120px;gap:10px;color:var(--g);font-size:.7rem;letter-spacing:2px">
+      <div class="bars" style="margin:0">
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
-      <p style="font-size:.55rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:5px">
-        ▶ Tráiler oficial · YouTube
-      </p>`;
-  } else {
-    // Sin ID en Jikan — buscar el tráiler usando el modo de búsqueda del iframe de YouTube
-    // listType=search + list=QUERY incrusta los resultados de búsqueda directamente
-    cont.innerHTML = `
-      <div class="yt-w">
-        <iframe
-          src="" 
-          srcdoc="<html><body style='background:#f0f0f0; display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif;'>
-            <p>Selecciona un video para comenzar</p>
-          </body></html>"
-          width="560" 
-          weight="315">
-        </iframe>
-      </div>
-      <p style="font-size:.55rem;color:var(--g);text-align:center;letter-spacing:1px;margin-top:5px">
-        🔍 Resultados de búsqueda · "${animeActual.title} trailer"
-      </p>`;
+      BUSCANDO TRÁILER...
+    </div>`;
+
+  if (animeActual.trailerId) {
+    // Jikan tiene el ID — YouTube directo, no necesita buscar
+    mostrarIframeYT(animeActual.trailerId, '▶ Tráiler oficial · YouTube');
+    return;
   }
+
+  // Sin ID en Jikan — intentar con varios servidores Piped en orden
+  // Si uno falla o pide bot check, se prueba el siguiente automáticamente
+  const PIPED_SERVERS = [
+    'https://pipedapi.adminforge.de',
+    'https://pipedapi.r4fo.com',
+    'https://pipedapi.darkness.services',
+    'https://api.piped.yt',
+  ];
+
+  const query = `${animeActual.title} trailer oficial`;
+  let ytId = null;
+
+  for (const server of PIPED_SERVERS) {
+    try {
+      const res = await fetch(
+        `${server}/search?q=${encodeURIComponent(query)}&filter=videos`,
+        { signal: AbortSignal.timeout(5000) }  // 5s por servidor
+      );
+      if (!res.ok) continue;  // Si da error HTTP, probar el siguiente
+
+      const json  = await res.json();
+      const items = json.items || [];
+      const video = items.find(x => x.type === 'stream' || x.url?.startsWith('/watch'));
+
+      if (video) {
+        const m = (video.url || '').match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+        if (m) { ytId = m[1]; break; }  // Encontrado — salir del loop
+      }
+    } catch(_) {
+      continue;  // Servidor no disponible, probar el siguiente
+    }
+  }
+
+  // Si algún servidor encontró el ID — reproducir en iframe
+  if (ytId) {
+    mostrarIframeYT(ytId, `🔍 "${animeActual.title} trailer"`);
+    trailerOk = true;
+    return;
+  }
+
+  // Todos los servidores fallaron — botón de YouTube como último recurso
+  const q = encodeURIComponent(query);
+  cont.innerHTML = `
+    <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;
+      padding:28px 20px;text-align:center">
+      <div style="font-size:1.8rem;margin-bottom:12px">📺</div>
+      <div style="font-family:var(--ft);font-size:.65rem;color:var(--b);
+        letter-spacing:2px;margin-bottom:8px">${animeActual.title}</div>
+      <div style="font-size:.65rem;color:var(--g);margin-bottom:18px;line-height:1.7">
+        No se encontró el tráiler automáticamente.<br>
+        Búscalo en YouTube:
+      </div>
+      <a href="https://www.youtube.com/results?search_query=${q}"
+        target="_blank" style="display:inline-block;background:transparent;
+        border:1px solid var(--v);color:var(--v);font-family:var(--ft);
+        font-size:.6rem;letter-spacing:2px;padding:10px 20px;border-radius:4px;
+        text-decoration:none;text-shadow:0 0 6px var(--vg);box-shadow:0 0 10px var(--vg)">
+        ▶ BUSCAR EN YOUTUBE →
+      </a>
+    </div>`;
+  trailerOk = true;
+}
+
+// Construye e inserta el iframe de YouTube con el ID dado
+function mostrarIframeYT(ytId, caption) {
+  const cont = document.getElementById('mTrailer');
+  cont.innerHTML = `
+    <div class="yt-w">
+      <iframe
+        src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1"
+        allowfullscreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+      </iframe>
+    </div>
+    <p style="font-size:.6rem;color:var(--g);text-align:center;
+      letter-spacing:1px;margin-top:6px">${caption}</p>`;
   trailerOk = true;
 }
 
@@ -2024,7 +2472,8 @@ function renderLista() {
            <option value="terminado">Terminado</option>
          </select>`;
 
-    return `<div class="li">
+    return `<div class="li" data-id="${a.id}">
+      <div class="li-check" onclick="toggleCheck(${a.id},this)"></div>
       <img src="${a.image}" alt="${(a.title||'').replace(/"/g,'')}" loading="lazy" onerror="this.style.display='none'">
       <div class="li-info">
         <div class="li-title">${a.title||'—'}</div>
@@ -2194,10 +2643,25 @@ function cargarRespaldo(event) {
 ════════════════════════════════════════ */
 function extraerYouTubeId(trailer) {
   if (!trailer) return null;
-  //sacar el ID del embed_url
-  const fuente = trailer.embed_url || '';
+
+  // Caso 1: youtube_id directo y limpio
+  if (trailer.youtube_id && trailer.youtube_id.trim() !== '') {
+    return trailer.youtube_id.trim();
+  }
+
+  // Caso 2: extraer solo el ID de 11 caracteres de embed_url o url
+  // Jikan devuelve cosas como:
+  //   https://www.youtube.com/embed/ABC123xyz12?autoplay=1&enablejsapi=1
+  //   https://youtu.be/ABC123xyz12
+  //   https://www.youtube.com/watch?v=ABC123xyz12
+  const fuente = trailer.embed_url || trailer.url || '';
   if (!fuente) return null;
-  return fuente;
+
+  const match = fuente.match(
+    /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  // Devolver SOLO el ID, nunca la URL completa
+  return match ? match[1] : null;
 }
 
 /* ════════════════════════════════════════
@@ -2619,8 +3083,365 @@ function toast(msg) {
 }
 
 /* ════════════════════════════════════════
-   INICIO
+   PANTALLA DE INTRO / BOOT — SECUENCIA CINEMATOGRÁFICA
 ════════════════════════════════════════ */
+(async function bootSequence() {
+  const logo    = document.getElementById('bootLogo');
+  const tagline = document.getElementById('bootTagline');
+  const term    = document.getElementById('bootTerminal');
+  const dots    = document.getElementById('bootDots');
+  const status  = document.getElementById('bootStatus');
+  const barWrap = document.getElementById('bootBarWrap');
+  const bar     = document.getElementById('bootBar');
+  const pct     = document.getElementById('bootPct');
+  const modules = document.getElementById('bootModules');
+
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  // Escribe texto letra por letra antes del cursor
+  function typeWrite(el, text, speed=75) {
+    return new Promise(res => {
+      let i = 0;
+      const cur = el.querySelector('.cursor');
+      const iv  = setInterval(() => {
+        if (i < text.length) {
+          el.insertBefore(document.createTextNode(text[i]), cur);
+          i++;
+        } else { clearInterval(iv); res(); }
+      }, speed);
+    });
+  }
+
+  // Escribe texto en un span normal
+  function typeSpan(el, text, speed=40) {
+    return new Promise(res => {
+      el.textContent = '';
+      let i = 0;
+      const iv = setInterval(() => {
+        if (i < text.length) { el.textContent += text[i]; i++; }
+        else { clearInterval(iv); res(); }
+      }, speed);
+    });
+  }
+
+  // Avanza la barra hasta un porcentaje dado
+  function fillBar(target, duration=600) {
+    return new Promise(res => {
+      const start   = parseFloat(bar.style.width) || 0;
+      const diff    = target - start;
+      const steps   = Math.ceil(duration / 30);
+      let   step    = 0;
+      const iv = setInterval(() => {
+        step++;
+        const val = start + diff * (step / steps);
+        bar.style.width = val + '%';
+        pct.textContent = Math.round(val) + '%';
+        if (step >= steps) { clearInterval(iv); res(); }
+      }, 30);
+    });
+  }
+
+  // Activa un módulo de carga
+  async function activarModulo(idx, durMs=350) {
+    const m = document.getElementById(`bm${idx}`);
+    if (!m) return;
+    m.classList.add('active');
+    await wait(durMs);
+    m.classList.remove('active');
+    m.classList.add('done');
+    m.querySelector('.bm-icon').textContent = '✓';
+  }
+
+  /* ── SECUENCIA ── */
+
+  // 1. Escribir logo
+  await wait(250);
+  await typeWrite(logo, 'CYBER//ANIME', 85);
+  await wait(200);
+
+  // 2. Mostrar tagline con fade
+  tagline.classList.add('visible');
+  await wait(400);
+
+  // 3. Mostrar terminal con slide-up
+  term.classList.add('visible');
+  await wait(500);
+
+  // 4. Escribir la contraseña (puntos)
+  const PASS = 'thebroders2026';
+  for (let i = 0; i < PASS.length; i++) {
+    await wait(70 + Math.random() * 60);  // Velocidad irregular, más realista
+    dots.textContent += '●';
+  }
+  await wait(300);
+
+  // 5. Verificando...
+  await typeSpan(status, 'VERIFICANDO CREDENCIALES...', 30);
+  status.className = 'boot-status wait';
+  await wait(600);
+
+  // 6. Pequeño "error" falso para drama
+  await typeSpan(status, 'COMPROBANDO ACCESO BIOMÉTRICO...', 30);
+  await wait(500);
+
+  // 7. Acceso concedido
+  await typeSpan(status, '[ ACCESO CONCEDIDO ] ✓', 35);
+  status.className = 'boot-status ok';
+  await wait(300);
+
+  // 8. Mostrar barra de progreso y módulos
+  barWrap.style.display = 'block';
+  modules.style.display = 'flex';
+  await wait(200);
+
+  // 9. Cargar módulos con barra
+  await Promise.all([fillBar(25, 400), activarModulo(0, 380)]);
+  await wait(80);
+  await Promise.all([fillBar(50, 350), activarModulo(1, 320)]);
+  await wait(80);
+  await Promise.all([fillBar(75, 300), activarModulo(2, 280)]);
+  await wait(80);
+  await Promise.all([fillBar(100, 250), activarModulo(3, 230)]);
+
+  await wait(300);
+  await typeSpan(status, 'SISTEMA LISTO — BIENVENIDO', 40);
+  await wait(500);
+
+  // 10. Fade out
+  document.getElementById('bootScreen').classList.add('fade-out');
+  await wait(900);
+  document.getElementById('bootScreen').style.display = 'none';
+})();
+
+
+/* ════════════════════════════════════════
+   MULTI-SELECCIÓN EN MI LISTA
+════════════════════════════════════════ */
+let modoSeleccion  = false;
+let seleccionados  = new Set();
+
+function toggleModoSeleccion() {
+  modoSeleccion = !modoSeleccion;
+  seleccionados.clear();
+
+  const toolbar = document.getElementById('msToolbar');
+  const cont    = document.getElementById('listCont');
+
+  toolbar.classList.toggle('active', modoSeleccion);
+  cont.classList.toggle('ms-mode', modoSeleccion);
+
+  // Desmarcar todos los checks visibles
+  document.querySelectorAll('.li-check').forEach(el => el.classList.remove('checked'));
+  actualizarToolbarMS();
+}
+
+function toggleCheck(id, el) {
+  if (!modoSeleccion) return;
+  if (seleccionados.has(id)) {
+    seleccionados.delete(id);
+    el.classList.remove('checked');
+  } else {
+    seleccionados.add(id);
+    el.classList.add('checked');
+  }
+  actualizarToolbarMS();
+}
+
+function actualizarToolbarMS() {
+  const n   = seleccionados.size;
+  const btn = document.getElementById('msDelBtn');
+  document.getElementById('msCount').textContent = n;
+  btn.disabled = n === 0;
+}
+
+function eliminarSeleccionados() {
+  if (!seleccionados.size) return;
+  const n  = seleccionados.size;
+  const ok = confirm(`¿Eliminar ${n} anime${n>1?'s':''} seleccionado${n>1?'s':''}?`);
+  if (!ok) return;
+
+  saveLista(miLista().filter(a => !seleccionados.has(a.id)));
+  seleccionados.clear();
+  modoSeleccion = false;
+  document.getElementById('msToolbar').classList.remove('active');
+  document.getElementById('listCont').classList.remove('ms-mode');
+  renderLista();
+  actualizarContadores();
+  renderStats();
+  toast(`${n} anime${n>1?'s':''} eliminado${n>1?'s':''}`);
+}
+
+
+/* ════════════════════════════════════════
+   GENERADOR DE CARTAS DE ANIME
+════════════════════════════════════════ */
+let cartasSeleccionadas = new Set();
+
+function abrirGeneradorCartas() {
+  const lista = miLista();
+  if (!lista.length) { toast('Tu lista está vacía.'); return; }
+
+  cartasSeleccionadas.clear();
+  const grid = document.getElementById('cardSelGrid');
+
+  const IMG_FB = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120'%3E%3Crect fill='%230a0a0a' width='80' height='120'/%3E%3C/svg%3E`;
+
+  grid.innerHTML = lista.map(a => `
+    <div class="card-sel-item" id="csi-${a.id}" onclick="toggleCartaSel(${a.id})">
+      <img src="${a.image||IMG_FB}" alt="${(a.title||'').replace(/"/g,'')}"
+        onerror="this.src='${IMG_FB}'">
+      <div class="card-sel-check">✓</div>
+      <div class="card-sel-name">${a.title||'—'}</div>
+    </div>`).join('');
+
+  actualizarContadorCartas();
+  document.getElementById('cardGenBg').classList.add('open');
+}
+
+function cerrarGeneradorCartas() {
+  document.getElementById('cardGenBg').classList.remove('open');
+  cartasSeleccionadas.clear();
+}
+
+function toggleCartaSel(id) {
+  const el = document.getElementById(`csi-${id}`);
+  if (cartasSeleccionadas.has(id)) {
+    cartasSeleccionadas.delete(id);
+    el.classList.remove('selected');
+  } else {
+    cartasSeleccionadas.add(id);
+    el.classList.add('selected');
+  }
+  actualizarContadorCartas();
+}
+
+function seleccionarTodasCartas() {
+  const lista = miLista();
+  // Si ya están todos, deseleccionar; si no, seleccionar todos
+  if (cartasSeleccionadas.size === lista.length) {
+    cartasSeleccionadas.clear();
+    document.querySelectorAll('.card-sel-item').forEach(el => el.classList.remove('selected'));
+  } else {
+    lista.forEach(a => {
+      cartasSeleccionadas.add(a.id);
+      document.getElementById(`csi-${a.id}`)?.classList.add('selected');
+    });
+  }
+  actualizarContadorCartas();
+}
+
+function actualizarContadorCartas() {
+  const n   = cartasSeleccionadas.size;
+  document.getElementById('cardSelCount').textContent = n;
+  document.getElementById('btnGenerarCartas').disabled = n === 0;
+}
+
+async function generarCartas() {
+  if (!cartasSeleccionadas.size) return;
+  const btn = document.getElementById('btnGenerarCartas');
+  btn.disabled = true; btn.textContent = '⏳ GENERANDO...';
+
+  try {
+    // Cargar html2canvas si no está
+    if (!window.html2canvas) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+
+    const lista  = miLista();
+    const zone   = document.getElementById('cardRenderZone');
+    const IDs    = [...cartasSeleccionadas];
+    let   count  = 0;
+
+    for (const id of IDs) {
+      const a = lista.find(x => x.id === id);
+      if (!a) continue;
+
+      // Construir la carta en el DOM
+      zone.innerHTML = construirCartaHTML(a);
+      const cartaEl  = zone.querySelector('.anime-card-render');
+
+      // Esperar que la imagen cargue
+      const img = cartaEl.querySelector('.acr-img');
+      if (img && !img.complete) {
+        await new Promise(res => { img.onload = res; img.onerror = res; });
+      }
+      await new Promise(res => setTimeout(res, 100));
+
+      // Capturar con html2canvas
+      const canvas = await html2canvas(cartaEl, {
+        backgroundColor: '#000000',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        width:  300,
+        height: cartaEl.offsetHeight,
+      });
+
+      // Descargar
+      const link      = document.createElement('a');
+      const titulo    = (a.title||'anime').replace(/[^a-zA-Z0-9]/g,'-').substring(0,30);
+      link.download   = `cyberanime-carta-${titulo}.png`;
+      link.href       = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      count++;
+      btn.textContent = `⏳ ${count}/${IDs.length}`;
+
+      // Pequeña pausa entre descargas para no saturar el navegador
+      if (IDs.length > 1) await new Promise(res => setTimeout(res, 400));
+    }
+
+    zone.innerHTML = '';
+    toast(`✓ ${count} carta${count>1?'s':''} generada${count>1?'s':''}`);
+
+  } catch(e) {
+    console.error(e);
+    toast('Error al generar las cartas.');
+  } finally {
+    btn.disabled = false; btn.textContent = '⬇ GENERAR';
+  }
+}
+
+function construirCartaHTML(a) {
+  const img      = a.image || '';
+  const titulo   = a.title || '—';
+  const score    = a.score ? `★ ${a.score}` : '';
+  const tipo     = a.type  || '?';
+  const eps      = a.episodes ? `${a.episodes} eps` : '';
+  const miCal    = a.miCal ? `★ ${a.miCal}/10 · MI NOTA` : '';
+  // Géneros como tags
+  const generos  = (a.genres || '').split(',')
+    .map(g => g.trim()).filter(Boolean).slice(0,4)
+    .map(g => `<span class="acr-genre-tag">${g}</span>`).join('');
+  // Sinopsis corta (viene del localStorage si fue guardada, si no mostramos lo que hay)
+  const sinopsis = a.synopsis || 'Sin sinopsis disponible.';
+  const IMG_FB   = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='420'%3E%3Crect fill='%230a0a0a' width='300' height='420'/%3E%3C/svg%3E`;
+
+  return `<div class="anime-card-render" style="position:relative;display:block;top:0;left:0">
+    <div class="acr-border-top"></div>
+    <img class="acr-img" src="${img||IMG_FB}" alt="${titulo.replace(/"/g,'')}" crossorigin="anonymous"
+      onerror="this.src='${IMG_FB}'">
+    <div class="acr-overlay">
+      <div class="acr-badge">CYBER//ANIME</div>
+      <div class="acr-title">${titulo}</div>
+      <div class="acr-meta">${tipo}${eps?' · '+eps:''}${score?' · '+score:''}</div>
+      ${generos ? `<div class="acr-genres">${generos}</div>` : ''}
+      <div class="acr-synopsis">${sinopsis}</div>
+      <div class="acr-score-row">
+        <span class="acr-score">${miCal || score || '—'}</span>
+        <span class="acr-firma">THEBRODERS · 2026</span>
+      </div>
+    </div>
+    <div class="acr-border-bot"></div>
+  </div>`;
+}
 // Conectar botón traducir mediante addEventListener (más seguro que onclick inline)
 document.getElementById('btnTraducir').addEventListener('click', traducirSinopsis);
 
