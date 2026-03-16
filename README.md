@@ -6,6 +6,8 @@ Lo mejor de todo es que no necesitas registro ni instalar nada. Solo abres la p�
 
 ¿Qué puedes hacer exactamente?
 
+---
+
 Buscador inteligente
 
 Arriba del todo tienes un buscador. Escribe el nombre de un anime y te aparecerán los resultados ordenados por fecha de salida, así ves primero lo más nuevo. Además, si algún día no sabes qué ver, puedes darle al botón Sorpréndeme y la app elegirá un anime completamente al azar para ti. Ideal para esas noches de indecisión.
@@ -14,9 +16,13 @@ Lo más visto de la temporada
 
 En la sección Top temporada encontrarás los 24 animes más populares del momento. Aquí puedes descubrir qué está petándolo ahora mismo y unirte a la conversación.
 
+---
+
 Calendario semanal
 
 ¿Llevas mal el control de los estrenos? Con el Calendario semanal tienes todos los animes en emisión organizados por día de la semana. Además, te mostramos el horario en hora local (la tuya) y también en hora estándar de Japón (JST), por si quieres saber a qué hora exacta se emite originalmente.
+
+---
 
 Mi Lista — tu espacio personal
 
@@ -35,21 +41,31 @@ Para cada anime puedes guardar:
 
 Además, dentro de Mi Lista puedes filtrar por género y tipo (serie, película, OVA, etc.), y también tienes un buscador interno para localizar rápidamente un título entre todos los que has guardado. ¿Tienes varios que quieres eliminar? No hay problema: activa la selección múltiple y borra de golpe todos los que ya no te interesen.
 
+---
+
 Generador de cartas coleccionables
 
-Imagina poder crear una carta de colección estilo anime con tu personaje favorito. Pues con el Generador de cartas puedes hacerlo. Eliges cualquier anime de tu lista, le pones tu nombre, un mensaje, y la app genera una imagen que puedes guardar o compartir con tus amigos. Perfecto para redes sociales o para tener un recuerdo especial. (Aún está en proceso de mejorarse)
+Imagina poder crear una carta de colección estilo anime con tu personaje favorito. Pues con el Generador de cartas puedes hacerlo. Eliges cualquier anime de tu lista, le pones tu nombre, un mensaje, y la app genera una imagen que puedes guardar o compartir con tus amigos. Perfecto para redes sociales o para tener un recuerdo especial. (Aún está en proceso de mejorarse).
+
+---
 
 CYBER//ANIME WRAPPED
 
 ¿Te acuerdas del Wrapped de Spotify, ese resumen del año? Pues aquí tenemos una versión para animes. Solo está visible entre el 25 y el 31 de diciembre, y cuando entras esos días te aparece una animación muy molona con tus estadísticas del año: cuántos animes viste, qué género predominó, tu nota media, etc. Es un detalle nostálgico para cerrar el año.
 
+---
+
 Respaldo en JSON
 
 Aunque los datos se guardan en tu navegador, puede que quieras pasarlos a otro ordenador o simplemente tener una copia de seguridad. Por eso incluimos la opción de exportar tu lista a un archivo JSON e importarla cuando quieras. Así nunca perderás tu progreso.
 
+---
+
 Pantalla de inicio con efecto terminal
 
 Cuando abres la app, lo primero que ves es una pantalla de introducción animada, como si fuera un sistema arrancando. Todo para meterte en ambiente desde el primer segundo.
+
+---
 
 Tecnología utilizada
 
@@ -66,6 +82,8 @@ Todo el código está pensado para ser ligero, rápido y fácil de modificar si 
 ¿Para quién es esto?
 
 Para cualquier persona que ame el anime, lleve un control de lo que ve y tenga un gusto por lo estético cyberpunk. También es ideal para desarrolladores que quieran ver un ejemplo de aplicación frontend pura, sin backend, que aprovecha APIs públicas y almacenamiento local. Y por supuesto, para quienes valoran la privacidad: no enviamos tus datos a ningún servidor, todo queda en tu máquina.
+
+---
 
 Créditos
 
