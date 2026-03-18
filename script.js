@@ -1,4 +1,6 @@
-/* CONFIGURACIÓN */
+/* ════════════════════════════════════════
+   CONFIGURACIÓN
+════════════════════════════════════════ */
 const API     = 'https://api.jikan.moe/v4';
 const DIAS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const DIAS_EN = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
@@ -7,7 +9,9 @@ const ORD_VIS = [1,2,3,4,5,6,0];  // Orden visual: Lun→Dom
 const TEMPS   = { spring:'PRIMAVERA', summer:'VERANO', fall:'OTOÑO', winter:'INVIERNO' };
 const TZ_LOCAL = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-/* ESTADO */
+/* ════════════════════════════════════════
+   ESTADO
+════════════════════════════════════════ */
 let animeActual   = null;
 let catActiva     = 'all';
 let genreActivo   = '';   // Género/tipo activo en el filtro de lista
@@ -18,7 +22,9 @@ let buscando      = false;
 let trailerOk     = false;
 let toastTimer    = null;
 
-/* TABS PRINCIPALES */
+/* ════════════════════════════════════════
+   TABS PRINCIPALES
+════════════════════════════════════════ */
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const id = btn.dataset.tab;
@@ -104,7 +110,7 @@ async function buscar() {
   sr.innerHTML = htmlLoad(`Buscando "${q}"...`);
 
   try {
-    const d = await apiFetch(`${API}/anime?q=${encodeURIComponent(q)}&limit=24&order_by=start_date&sort=asc&sfw=true`);
+    const d = await apiFetch(`${API}/anime?q=${encodeURIComponent(q)}&limit=24&sfw=true`);
     const l = d.data || [];
     if (!l.length) { sr.innerHTML = htmlEmpty(`Sin resultados para "<strong style="color:var(--v)">${q}</strong>"`); return; }
     sr.innerHTML = `<div class="grid">${l.map(a => tarjeta(a)).join('')}</div>`;
@@ -1437,134 +1443,47 @@ function toast(msg) {
 }
 
 /* ════════════════════════════════════════
-   PANTALLA DE INTRO / BOOT — SECUENCIA CINEMATOGRÁFICA
+   PANTALLA DE INTRO / BOOT v3 — 2 SEGUNDOS
 ════════════════════════════════════════ */
 (async function bootSequence() {
-  const logo    = document.getElementById('bootLogo');
-  const tagline = document.getElementById('bootTagline');
-  const term    = document.getElementById('bootTerminal');
-  const dots    = document.getElementById('bootDots');
-  const status  = document.getElementById('bootStatus');
-  const barWrap = document.getElementById('bootBarWrap');
-  const bar     = document.getElementById('bootBar');
-  const pct     = document.getElementById('bootPct');
-  const modules = document.getElementById('bootModules');
+  const wrap   = document.getElementById('boot2Wrap');
+  const lines  = wrap?.querySelector('.boot2-lines');
+  const logo   = document.getElementById('boot2Logo');
+  const bar    = document.getElementById('boot2Bar');
+  const status = document.getElementById('boot2Status');
+  const screen = document.getElementById('bootScreen');
 
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
-  // Escribe texto letra por letra antes del cursor
-  function typeWrite(el, text, speed=75) {
-    return new Promise(res => {
-      let i = 0;
-      const cur = el.querySelector('.cursor');
-      const iv  = setInterval(() => {
-        if (i < text.length) {
-          el.insertBefore(document.createTextNode(text[i]), cur);
-          i++;
-        } else { clearInterval(iv); res(); }
-      }, speed);
-    });
-  }
+  // Paso 1 — Líneas se expanden desde el centro (500ms)
+  await wait(80);
+  lines?.classList.add('expanded');
+  wrap?.classList.add('show-corners');
+  await wait(500);
 
-  // Escribe texto en un span normal
-  function typeSpan(el, text, speed=40) {
-    return new Promise(res => {
-      el.textContent = '';
-      let i = 0;
-      const iv = setInterval(() => {
-        if (i < text.length) { el.textContent += text[i]; i++; }
-        else { clearInterval(iv); res(); }
-      }, speed);
-    });
-  }
-
-  // Avanza la barra hasta un porcentaje dado
-  function fillBar(target, duration=600) {
-    return new Promise(res => {
-      const start   = parseFloat(bar.style.width) || 0;
-      const diff    = target - start;
-      const steps   = Math.ceil(duration / 30);
-      let   step    = 0;
-      const iv = setInterval(() => {
-        step++;
-        const val = start + diff * (step / steps);
-        bar.style.width = val + '%';
-        pct.textContent = Math.round(val) + '%';
-        if (step >= steps) { clearInterval(iv); res(); }
-      }, 30);
-    });
-  }
-
-  // Activa un módulo de carga
-  async function activarModulo(idx, durMs=350) {
-    const m = document.getElementById(`bm${idx}`);
-    if (!m) return;
-    m.classList.add('active');
-    await wait(durMs);
-    m.classList.remove('active');
-    m.classList.add('done');
-    m.querySelector('.bm-icon').textContent = '✓';
-  }
-
-  /* ── SECUENCIA ── */
-
-  // 1. Escribir logo
-  await wait(250);
-  await typeWrite(logo, 'CYBER//ANIME', 85);
-  await wait(200);
-
-  // 2. Mostrar tagline con fade
-  tagline.classList.add('visible');
+  // Paso 2 — Logo aparece con pop (400ms)
+  logo?.classList.add('visible');
   await wait(400);
 
-  // 3. Mostrar terminal con slide-up
-  term.classList.add('visible');
+  // Paso 3 — Barra de progreso se llena (700ms)
+  const ESTADOS = ['CONECTANDO...', 'CARGANDO DATOS...', 'LISTO'];
+  let pct = 0;
+  await new Promise(res => {
+    const iv = setInterval(() => {
+      pct = Math.min(100, pct + 2.5);
+      if (bar) bar.style.width = pct + '%';
+      if (pct >= 33  && status) status.textContent = ESTADOS[1];
+      if (pct >= 90  && status) status.textContent = ESTADOS[2];
+      if (pct >= 100) { clearInterval(iv); res(); }
+    }, 18);
+  });
+
+  await wait(150);
+
+  // Paso 4 — Fade out (500ms)
+  screen?.classList.add('fade-out');
   await wait(500);
-
-  // 4. Escribir la contraseña (puntos)
-  const PASS = 'fgmcl2026';
-  for (let i = 0; i < PASS.length; i++) {
-    await wait(70 + Math.random() * 60);  // Velocidad irregular, más realista
-    dots.textContent += '●';
-  }
-  await wait(300);
-
-  // 5. Verificando...
-  await typeSpan(status, 'VERIFICANDO CREDENCIALES...', 30);
-  status.className = 'boot-status wait';
-  await wait(600);
-
-  // 6. Pequeño "error" falso para drama
-  await typeSpan(status, 'COMPROBANDO ACCESO BIOMÉTRICO...', 30);
-  await wait(500);
-
-  // 7. Acceso concedido
-  await typeSpan(status, '[ ACCESO CONCEDIDO ] ✓', 35);
-  status.className = 'boot-status ok';
-  await wait(300);
-
-  // 8. Mostrar barra de progreso y módulos
-  barWrap.style.display = 'block';
-  modules.style.display = 'flex';
-  await wait(200);
-
-  // 9. Cargar módulos con barra
-  await Promise.all([fillBar(25, 400), activarModulo(0, 380)]);
-  await wait(80);
-  await Promise.all([fillBar(50, 350), activarModulo(1, 320)]);
-  await wait(80);
-  await Promise.all([fillBar(75, 300), activarModulo(2, 280)]);
-  await wait(80);
-  await Promise.all([fillBar(100, 250), activarModulo(3, 230)]);
-
-  await wait(300);
-  await typeSpan(status, 'SISTEMA LISTO — BIENVENIDO', 40);
-  await wait(500);
-
-  // 10. Fade out
-  document.getElementById('bootScreen').classList.add('fade-out');
-  await wait(900);
-  document.getElementById('bootScreen').style.display = 'none';
+  if (screen) screen.style.display = 'none';
 })();
 
 
@@ -1997,7 +1916,20 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.quadraticCurveTo(x, y, x + r, y);
   ctx.closePath();
 }
-// Conectar botón traducir mediante addEventListener (más seguro que onclick inline)
+/* ════════════════════════════════════════
+   ACERCA DE
+════════════════════════════════════════ */
+function abrirAcercaDe() {
+  document.getElementById('aboutBg').classList.add('open');
+}
+function cerrarAcercaDe() {
+  document.getElementById('aboutBg').classList.remove('open');
+}
+document.getElementById('aboutBg').addEventListener('click', function(e) {
+  if (e.target === this) cerrarAcercaDe();
+});
+
+// Conectar botón traducir
 document.getElementById('btnTraducir').addEventListener('click', traducirSinopsis);
 
 buildWeek();

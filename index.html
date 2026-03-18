@@ -10,44 +10,30 @@
 </head>
 <body>
 
-<!-- ANIMACION DE INICIO -->
+<!-- PANTALLA DE INTRO -->
 <div id="bootScreen">
-  <div class="boot-logo" id="bootLogo"><span class="cursor"></span></div>
-  <div class="boot-tagline" id="bootTagline">YOUR ANIME DATABASE</div>
-  <div class="boot-deco">
-    <div class="boot-deco-line"></div>
-    <div class="boot-deco-txt">FGMCL · 2026</div>
-    <div class="boot-deco-line right"></div>
-  </div>
-  <div class="boot-terminal" id="bootTerminal">
-    <div class="boot-term-header">
-      <div class="boot-term-dot r"></div>
-      <div class="boot-term-dot y"></div>
-      <div class="boot-term-dot g"></div>
-      <span class="boot-term-title">CYBER//ANIME · TERMINAL v2.0</span>
+  <div class="boot2-wrap" id="boot2Wrap">
+    <!-- Logo con líneas que se expanden -->
+    <div class="boot2-lines">
+      <div class="boot2-line-h top"></div>
+      <div class="boot2-line-h bot"></div>
+      <div class="boot2-line-v left"></div>
+      <div class="boot2-line-v right"></div>
     </div>
-    <div class="boot-term-line"><span class="lbl">SYS:</span><span class="val">CYBER//ANIME OS v2.0.26</span></div>
-    <div class="boot-term-line"><span class="lbl">USR:</span><span class="val">FGMCL</span> <span class="dim">· privilegios root</span></div>
-    <div class="boot-divider"></div>
-    <div class="boot-pass-row">
-      <span class="boot-pass-lbl">CONTRASEÑA ▶</span>
-      <span class="boot-pass-dots" id="bootDots"></span>
+    <!-- Logo central -->
+    <div class="boot2-logo" id="boot2Logo">
+      <div class="boot2-slash">//</div>
+      <div class="boot2-title" id="boot2Title">CYBER<span class="boot2-hl">ANIME</span></div>
+      <div class="boot2-sub" id="boot2Sub">YOUR ANIME DATABASE</div>
     </div>
-    <div class="boot-divider"></div>
-    <div class="boot-status wait" id="bootStatus">ESPERANDO AUTENTICACIÓN...</div>
-    <div class="boot-bar-wrap" id="bootBarWrap" style="display:none">
-      <div class="boot-bar-lbl">
-        <span>INICIALIZANDO SISTEMA</span>
-        <span id="bootPct">0%</span>
-      </div>
-      <div class="boot-bar-track"><div class="boot-bar-fill" id="bootBar"></div></div>
+    <!-- Barra de progreso inferior -->
+    <div class="boot2-bar-wrap">
+      <div class="boot2-bar-fill" id="boot2Bar"></div>
     </div>
-    <div class="boot-modules" id="bootModules" style="display:none">
-      <div class="boot-module" id="bm0"><span class="bm-icon">◈</span>Cargando base de datos Jikan...</div>
-      <div class="boot-module" id="bm1"><span class="bm-icon">◈</span>Restaurando tu lista de animes...</div>
-      <div class="boot-module" id="bm2"><span class="bm-icon">◈</span>Sincronizando calendario...</div>
-      <div class="boot-module" id="bm3"><span class="bm-icon">◈</span>Activando interfaz neón...</div>
-    </div>
+    <!-- Estado -->
+    <div class="boot2-status" id="boot2Status">INICIANDO SISTEMA...</div>
+    <!-- Empresa -->
+    <div class="boot2-firma">FGMCL · 2026</div>
   </div>
 </div>
 
@@ -69,7 +55,7 @@
 
 <main>
 
-  <!-- BUSCADOR -->
+  <!-- ── BUSCADOR ── -->
   <section id="s-search" class="section active">
     <div class="search-row">
       <input id="si" class="search-inp" type="text" placeholder="Buscar anime... (mín. 3 letras)" autocomplete="off">
@@ -83,7 +69,7 @@
     <div id="sr"><div class="msg"><span class="ico">⌨</span>Escribe y presiona BUSCAR</div></div>
   </section>
 
-  <!-- TOP -->
+  <!-- ── TOP ── -->
   <section id="s-top" class="section">
     <div class="top-banner">
       <div>
@@ -98,7 +84,7 @@
     </div>
   </section>
 
-  <!-- CALENDARIO -->
+  <!-- ── CALENDARIO ── -->
   <section id="s-cal" class="section">
     <div class="cal-header">
       <div>
@@ -114,7 +100,7 @@
     </div>
   </section>
 
-  <!-- MI LISTA -->
+  <!-- ── MI LISTA ── -->
   <section id="s-list" class="section">
     <div class="stats-box">
       <div class="stats-title">▸ MIS ESTADÍSTICAS</div>
@@ -137,7 +123,7 @@
       <button class="ltab" data-cat="terminado">TERMINADO <span class="lcnt" id="c-t">0</span></button>
     </div>
 
-    <!-- Filtro por género (se construye con JS) -->
+    <!-- Filtro por género/tipo — se construye dinámicamente con JS -->
     <div id="genreFilterWrap" class="genre-filter-wrap" style="display:none">
       <div class="genre-filter-label">▸ FILTRAR POR GÉNERO / TIPO</div>
       <div id="genreTags" class="genre-tags"></div>
@@ -188,8 +174,157 @@
 <footer class="footer">
   <div class="footer-brand">CYBER//ANIME</div>
   <div class="footer-sub">© 2026 · FGMCL · ALL RIGHTS RESERVED</div>
+  <div class="footer-links">
+    <a href="https://github.com/jrv30891940/Cyber-anime" target="_blank" class="footer-link">⌥ GITHUB</a>
+    <span class="footer-sep">·</span>
+    <a href="https://t.me/+12lcsA9GxSUwZDUx" target="_blank" class="footer-link">✈ TELEGRAM</a>
+    <span class="footer-sep">·</span>
+    <button class="footer-link" onclick="abrirAcercaDe()">◈ ACERCA DE</button>
+  </div>
   <div class="footer-line"></div>
 </footer>
+
+<!-- MODAL ACERCA DE -->
+<div id="aboutBg" class="modal-bg" style="z-index:250">
+  <div class="modal" style="max-width:500px">
+    <div class="m-body" style="padding:20px;max-height:85vh;overflow-y:auto">
+
+      <!-- Cabecera -->
+      <div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #111">
+        <div style="font-family:var(--ft);font-size:1.3rem;color:var(--v);
+          text-shadow:0 0 16px var(--v);letter-spacing:4px">CYBER//ANIME</div>
+        <div style="font-size:.6rem;color:var(--g);letter-spacing:4px;margin-top:4px">
+          YOUR ANIME DATABASE · v2.0
+        </div>
+        <div style="font-size:.58rem;color:#444;letter-spacing:2px;margin-top:6px">
+          DESARROLLADO POR FGMCL · 2026
+        </div>
+      </div>
+
+      <!-- Qué es -->
+      <div class="about-section-title">▸ ¿QUÉ ES CYBER//ANIME?</div>
+      <p class="about-text">
+        CYBER//ANIME es tu base de datos personal de anime con estética cyberpunk. Funciona
+        directamente desde el navegador de tu celular o computadora — sin instalar nada,
+        sin crear cuenta, sin anuncios. Conecta con la base de datos de MyAnimeList para
+        darte información actualizada de todos los animes que existen.
+      </p>
+
+      <!-- Buscador -->
+      <div class="about-section-title">▸ BUSCADOR</div>
+      <p class="about-text">
+        Escribe el nombre de cualquier anime y presiona <strong>BUSCAR</strong>. Los resultados
+        aparecen ordenados por relevancia — el que más coincide con lo que escribiste sale
+        primero. También puedes tocar <strong>⚡ SORPRÉNDEME</strong> para que el sistema
+        te elija un anime completamente al azar. Ideal cuando no sabes qué ver.
+      </p>
+
+      <!-- TOP -->
+      <div class="about-section-title">▸ TOP — TEMPORADA ACTUAL</div>
+      <p class="about-text">
+        Muestra los 24 animes más populares de la temporada que está al aire ahora mismo,
+        ordenados por cantidad de seguidores en MyAnimeList. Se actualiza automáticamente
+        cada temporada: Invierno, Primavera, Verano y Otoño.
+      </p>
+
+      <!-- Calendario -->
+      <div class="about-section-title">▸ CALENDARIO SEMANAL</div>
+      <p class="about-text">
+        Muestra qué animes se emiten cada día de la semana. Toca cualquier día para ver
+        la lista de ese día con el horario de emisión en Japón y convertido automáticamente
+        a tu hora local. Así nunca te pierdes un capítulo nuevo.
+      </p>
+
+      <!-- Mi Lista -->
+      <div class="about-section-title">▸ MI LISTA</div>
+      <p class="about-text">
+        Tu colección personal de animes. Cada anime que agregas puede estar en tres estados:
+      </p>
+      <div class="about-list">
+        <div class="about-item">
+          <span class="about-dot">◈</span>
+          <div><strong>Por ver</strong> — Lo tienes pendiente pero aún no empiezas</div>
+        </div>
+        <div class="about-item">
+          <span class="about-dot">◈</span>
+          <div><strong>Viendo</strong> — Puedes llevar el conteo de episodios con los botones − y +, ver tu progreso en una barra y registrar la fecha en que empezaste</div>
+        </div>
+        <div class="about-item">
+          <span class="about-dot">◈</span>
+          <div><strong>Terminado</strong> — Puedes calificarlo del 1 al 10 con estrellas, ver cuándo lo empezaste y terminaste, y escribir tus notas personales sobre él</div>
+        </div>
+      </div>
+      <p class="about-text" style="margin-top:10px">
+        Además puedes filtrar tu lista por género o tipo de anime, buscar dentro de ella,
+        seleccionar varios a la vez para eliminarlos, y guardar o restaurar toda tu colección
+        como un archivo de respaldo.
+      </p>
+
+      <!-- Estadísticas -->
+      <div class="about-section-title">▸ ESTADÍSTICAS</div>
+      <p class="about-text">
+        En la parte superior de tu lista siempre verás un resumen de tu actividad:
+        cuántos animes tienes en total, cuántos terminaste, cuántas horas has visto y cuál
+        es tu calificación promedio. Una barra visual muestra qué tan avanzada está tu lista.
+      </p>
+
+      <!-- Cartas -->
+      <div class="about-section-title">▸ GENERADOR DE CARTAS</div>
+      <p class="about-text">
+        Convierte cualquier anime de tu lista en una imagen estilo carta coleccionable con
+        la portada, información del anime, géneros, sinopsis y tu puntuación personal.
+        Puedes generar varias cartas a la vez y descargarlas como imágenes para compartir
+        donde quieras.
+      </p>
+
+      <!-- Wrapped -->
+      <div class="about-section-title">▸ CYBER//ANIME WRAPPED</div>
+      <p class="about-text">
+        Del 25 al 31 de diciembre aparece el Wrapped — un resumen animado de tu año
+        al estilo de las historias de Instagram. Muestra cuántos animes completaste,
+        cuántas horas invertiste, tu personalidad otaku según tus géneros favoritos,
+        tu top 3 de animes del año y mucho más. Se puede guardar como imagen.
+      </p>
+
+      <!-- Privacidad -->
+      <div class="about-section-title">▸ PRIVACIDAD</div>
+      <div style="background:#050505;border:1px solid var(--vd);border-radius:6px;padding:14px;margin-bottom:16px">
+        <p style="font-size:.72rem;color:#bbb;line-height:1.85;margin:0">
+          🔒 <strong style="color:var(--b)">No recopilamos ningún dato tuyo.</strong><br><br>
+          Todo lo que guardas — tu lista, calificaciones, notas y fechas — queda
+          almacenado únicamente en <strong style="color:var(--b)">tu propio dispositivo</strong>.
+          Nada sale de tu navegador. No hay servidores propios, no hay base de datos,
+          no hay cuentas, no hay cookies de seguimiento y no hay publicidad de ningún tipo.<br><br>
+          La información de los animes proviene de <strong style="color:var(--b)">Jikan</strong>,
+          un servicio público gratuito conectado a MyAnimeList. FGMCL no tiene acceso
+          a tus datos en ningún momento.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div class="about-section-title">▸ COMUNIDAD Y CÓDIGO</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <a href="https://github.com/jrv30891940/Cyber-anime" target="_blank" class="about-link-btn">
+          ⌥ GITHUB
+        </a>
+        <a href="https://t.me/+12lcsA9GxSUwZDUx" target="_blank" class="about-link-btn tg">
+          ✈ TELEGRAM
+        </a>
+      </div>
+
+      <!-- Créditos -->
+      <div style="font-size:.6rem;color:#333;letter-spacing:2px;
+        border-top:1px solid #111;padding-top:14px;text-align:center;line-height:2">
+        HECHO CON ♥ POR FGMCL · VENEZUELA · 2026<br>
+        <span style="color:#222">DATOS: JIKAN API · MYANIMELIST</span>
+      </div>
+
+      <div class="m-acts" style="margin-top:16px">
+        <button class="btn-close" onclick="cerrarAcercaDe()">[ CERRAR ]</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- GENERADOR DE CARTAS -->
 <div id="cardGenBg" class="card-gen-bg">
@@ -222,7 +357,7 @@
   <div class="w-tap-prev" onclick="wPrev()"></div>
   <div class="w-tap-next" onclick="wNext()"></div>
 
-  <!-- SLIDE 1: INTRO -->
+  <!-- ═══ SLIDE 1: INTRO ═══ -->
   <div class="w-story" id="wSlide0">
     <div class="w-story-bg" id="wBg0"></div>
     <div class="w-story-overlay"></div>
@@ -244,7 +379,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 2: TIEMPO INVERTIDO -->
+  <!-- ═══ SLIDE 2: TIEMPO INVERTIDO ═══ -->
   <div class="w-story" id="wSlide1">
     <div class="w-story-bg" id="wBg1"></div>
     <div class="w-story-overlay"></div>
@@ -258,7 +393,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 3: PERSONALIDAD OTAKU  -->
+  <!-- ═══ SLIDE 3: PERSONALIDAD OTAKU ═══ -->
   <div class="w-story" id="wSlide2">
     <div class="w-story-bg" id="wBg2"></div>
     <div class="w-story-overlay"></div>
@@ -276,7 +411,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 4: TOP 3 ANIMES -->
+  <!-- ═══ SLIDE 4: TOP 3 ANIMES ═══ -->
   <div class="w-story" id="wSlide3">
     <div class="w-story-bg" id="wBg3"></div>
     <div class="w-story-overlay"></div>
@@ -291,7 +426,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 5: GÉNEROS -->
+  <!-- ═══ SLIDE 5: GÉNEROS ═══ -->
   <div class="w-story" id="wSlide4">
     <div class="w-story-bg" id="wBg4"></div>
     <div class="w-story-overlay"></div>
@@ -303,7 +438,7 @@
     </div>
   </div>
 
-  <!-- SLIDE 6: CIERRE -->
+  <!-- ═══ SLIDE 6: CIERRE ═══ -->
   <div class="w-story" id="wSlide5">
     <div class="w-story-bg" id="wBg5"></div>
     <div class="w-story-overlay" style="background:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,.8))"></div>
@@ -315,7 +450,7 @@
       <div class="w-anim w-title-lg" id="wS5Main" style="font-size:1.1rem">—</div>
       <div class="w-anim w-subtitle" id="wS5Sub">—</div>
       <div class="w-anim w-firma-row" style="margin-top:28px">
-        <span class="w-firma-txt" id="wS5Firma">FGMCL · 2025</span>
+        <span class="w-firma-txt" id="wS5Firma">THEBRODERS · 2025</span>
       </div>
     </div>
     <!-- Botones en el último slide -->
