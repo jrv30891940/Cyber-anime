@@ -978,34 +978,37 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 /* ── PANEL SELECTOR DE TEMA ── */
 .theme-panel {
   position:fixed; bottom:70px; right:14px;
-  background:var(--nc); border:1px solid var(--v);
-  border-radius:8px; padding:12px 14px;
-  box-shadow:0 0 20px var(--vg);
-  z-index:150; display:none; flex-direction:column; gap:8px;
-  min-width:160px;
+  background:#0a0a0a; border:1px solid var(--v);
+  border-radius:10px; padding:14px 16px;
+  box-shadow:0 0 24px var(--vg);
+  z-index:152; display:none;
+  flex-direction:column; gap:10px;
+  width:196px;
 }
 .theme-panel.open { display:flex; }
 .theme-panel-title {
   font-family:var(--ft); font-size:.52rem; letter-spacing:3px;
-  color:var(--g); margin-bottom:4px;
+  color:var(--g);
 }
 .theme-grid {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:8px;
+}
+.theme-col {
+  display:flex; flex-direction:column;
+  align-items:center; gap:4px;
 }
 .theme-dot {
-  width:28px; height:28px; border-radius:50%;
-  border:2px solid transparent; cursor:pointer;
-  transition:transform .15s, border-color .15s;
-  position:relative;
+  width:32px; height:32px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);
+  cursor:pointer;
+  transition:transform .15s, border-color .15s, box-shadow .15s;
+  flex-shrink:0;
 }
-.theme-dot:hover { transform:scale(1.15); }
-.theme-dot.active { border-color:#fff; box-shadow:0 0 8px currentColor; }
-.theme-dot.active::after {
-  content:'✓'; position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:.6rem; color:#000; font-weight:900;
-}
-.theme-dot[data-t="green"]  { background:#39FF14; }
+.theme-dot:hover  { transform:scale(1.18); border-color:rgba(255,255,255,.5); }
+.theme-dot.active { border-color:#fff; box-shadow:0 0 10px rgba(255,255,255,.4); }
+.theme-dot[data-t="green"]  { background:#39FF14; box-shadow:0 0 6px #39FF14; }
 .theme-dot[data-t="cyan"]   { background:#00FFFF; }
 .theme-dot[data-t="pink"]   { background:#FF2D78; }
 .theme-dot[data-t="orange"] { background:#FF6A00; }
@@ -1013,21 +1016,31 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .theme-dot[data-t="blue"]   { background:#3D9BFF; }
 .theme-dot[data-t="gold"]   { background:#FFD700; }
 .theme-dot[data-t="red"]    { background:#FF3333; }
+.theme-dot.active[data-t="green"]  { box-shadow:0 0 12px #39FF14; }
+.theme-dot.active[data-t="cyan"]   { box-shadow:0 0 12px #00FFFF; }
+.theme-dot.active[data-t="pink"]   { box-shadow:0 0 12px #FF2D78; }
+.theme-dot.active[data-t="orange"] { box-shadow:0 0 12px #FF6A00; }
+.theme-dot.active[data-t="purple"] { box-shadow:0 0 12px #BF5FFF; }
+.theme-dot.active[data-t="blue"]   { box-shadow:0 0 12px #3D9BFF; }
+.theme-dot.active[data-t="gold"]   { box-shadow:0 0 12px #FFD700; }
+.theme-dot.active[data-t="red"]    { box-shadow:0 0 12px #FF3333; }
 .theme-dot-lbl {
-  font-family:var(--ft); font-size:.42rem; color:var(--g);
-  text-align:center; margin-top:2px; letter-spacing:.5px;
+  font-family:var(--ft); font-size:.38rem; color:var(--g);
+  text-align:center; letter-spacing:.5px; line-height:1;
 }
 
-/* ── BOTÓN FLOTANTE PARA ABRIR EL PANEL ── */
+/* ── BOTÓN FLOTANTE ── */
 .btn-theme-float {
-  position:fixed; bottom:14px; right:14px; z-index:151;
-  width:44px; height:44px; border-radius:50%;
-  background:var(--nc); border:1px solid var(--v);
-  color:var(--v); font-size:1.1rem; cursor:pointer;
+  position:fixed; bottom:16px; right:16px; z-index:151;
+  width:46px; height:46px; border-radius:50%;
+  background:#0a0a0a; border:1px solid var(--v);
+  font-size:1.2rem; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  box-shadow:0 0 14px var(--vg); transition:all .2s;
+  box-shadow:0 0 16px var(--vg); transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-theme-float:hover { background:var(--v); color:#000; box-shadow:0 0 24px var(--v); }
+.btn-theme-float:hover,
+.btn-theme-float:active { background:var(--v); box-shadow:0 0 28px var(--v); }
 
 /* ── RESPONSIVE ────────────────────────────────── */
 @media(max-width:380px) {
