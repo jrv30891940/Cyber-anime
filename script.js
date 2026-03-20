@@ -1917,6 +1917,42 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 /* ════════════════════════════════════════
+   TEMAS DE COLOR
+════════════════════════════════════════ */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('cyberTheme', t);
+  // Actualizar punto activo
+  document.querySelectorAll('.theme-dot').forEach(d => {
+    d.classList.toggle('active', d.dataset.t === t);
+  });
+  toggleThemePanel(false);
+  toast(`Tema: ${t.toUpperCase()}`);
+}
+
+function toggleThemePanel(force) {
+  const panel = document.getElementById('themePanel');
+  const isOpen = panel.classList.contains('open');
+  const shouldOpen = force !== undefined ? force : !isOpen;
+  panel.classList.toggle('open', shouldOpen);
+}
+
+// Cerrar panel al tocar fuera
+document.addEventListener('click', e => {
+  const panel = document.getElementById('themePanel');
+  const btn   = document.getElementById('btnTheme');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+    toggleThemePanel(false);
+  }
+});
+
+// Cargar tema guardado al iniciar
+(function() {
+  const saved = localStorage.getItem('cyberTheme');
+  if (saved) setTheme(saved);
+})();
+
+/* ════════════════════════════════════════
    ACERCA DE
 ════════════════════════════════════════ */
 function abrirAcercaDe() {

@@ -929,6 +929,106 @@ main { max-width:900px; margin:0 auto; padding:14px; }
 .footer-link:hover { color:var(--v); }
 .footer-sep { color:#333; font-size:.6rem; }
 
+/* ══════════════════════════════════════════
+   TEMAS DE COLOR
+   Cada tema redefine --v --vd --vg --b
+══════════════════════════════════════════ */
+
+/* Verde neón — por defecto */
+:root, [data-theme="green"] {
+  --v:  #39FF14; --vd: #1a7a08;
+  --vg: rgba(57,255,20,.3); --b: #e8ffe8;
+}
+/* Cian eléctrico */
+[data-theme="cyan"] {
+  --v:  #00FFFF; --vd: #006666;
+  --vg: rgba(0,255,255,.3); --b: #e0ffff;
+}
+/* Rosa cyberpunk */
+[data-theme="pink"] {
+  --v:  #FF2D78; --vd: #7a0035;
+  --vg: rgba(255,45,120,.3); --b: #ffe8f0;
+}
+/* Naranja fuego */
+[data-theme="orange"] {
+  --v:  #FF6A00; --vd: #7a3000;
+  --vg: rgba(255,106,0,.3); --b: #fff0e8;
+}
+/* Violeta */
+[data-theme="purple"] {
+  --v:  #BF5FFF; --vd: #5a1a8a;
+  --vg: rgba(191,95,255,.3); --b: #f5e8ff;
+}
+/* Azul eléctrico */
+[data-theme="blue"] {
+  --v:  #3D9BFF; --vd: #0d4080;
+  --vg: rgba(61,155,255,.3); --b: #e8f4ff;
+}
+/* Amarillo dorado */
+[data-theme="gold"] {
+  --v:  #FFD700; --vd: #806800;
+  --vg: rgba(255,215,0,.3); --b: #fffbe8;
+}
+/* Rojo sangre */
+[data-theme="red"] {
+  --v:  #FF3333; --vd: #7a0000;
+  --vg: rgba(255,51,51,.3); --b: #ffe8e8;
+}
+
+/* ── PANEL SELECTOR DE TEMA ── */
+.theme-panel {
+  position:fixed; bottom:70px; right:14px;
+  background:var(--nc); border:1px solid var(--v);
+  border-radius:8px; padding:12px 14px;
+  box-shadow:0 0 20px var(--vg);
+  z-index:150; display:none; flex-direction:column; gap:8px;
+  min-width:160px;
+}
+.theme-panel.open { display:flex; }
+.theme-panel-title {
+  font-family:var(--ft); font-size:.52rem; letter-spacing:3px;
+  color:var(--g); margin-bottom:4px;
+}
+.theme-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
+}
+.theme-dot {
+  width:28px; height:28px; border-radius:50%;
+  border:2px solid transparent; cursor:pointer;
+  transition:transform .15s, border-color .15s;
+  position:relative;
+}
+.theme-dot:hover { transform:scale(1.15); }
+.theme-dot.active { border-color:#fff; box-shadow:0 0 8px currentColor; }
+.theme-dot.active::after {
+  content:'✓'; position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.6rem; color:#000; font-weight:900;
+}
+.theme-dot[data-t="green"]  { background:#39FF14; }
+.theme-dot[data-t="cyan"]   { background:#00FFFF; }
+.theme-dot[data-t="pink"]   { background:#FF2D78; }
+.theme-dot[data-t="orange"] { background:#FF6A00; }
+.theme-dot[data-t="purple"] { background:#BF5FFF; }
+.theme-dot[data-t="blue"]   { background:#3D9BFF; }
+.theme-dot[data-t="gold"]   { background:#FFD700; }
+.theme-dot[data-t="red"]    { background:#FF3333; }
+.theme-dot-lbl {
+  font-family:var(--ft); font-size:.42rem; color:var(--g);
+  text-align:center; margin-top:2px; letter-spacing:.5px;
+}
+
+/* ── BOTÓN FLOTANTE PARA ABRIR EL PANEL ── */
+.btn-theme-float {
+  position:fixed; bottom:14px; right:14px; z-index:151;
+  width:44px; height:44px; border-radius:50%;
+  background:var(--nc); border:1px solid var(--v);
+  color:var(--v); font-size:1.1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 14px var(--vg); transition:all .2s;
+}
+.btn-theme-float:hover { background:var(--v); color:#000; box-shadow:0 0 24px var(--v); }
+
 /* ── RESPONSIVE ────────────────────────────────── */
 @media(max-width:380px) {
   .grid { grid-template-columns:repeat(2,1fr); }

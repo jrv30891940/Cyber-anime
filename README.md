@@ -3,44 +3,60 @@
 
 > App web de seguimiento de animes con estética cyberpunk. Sin instalación, sin cuenta, sin anuncios.
 
-[![GitHub](https://img.shields.io/badge/GitHub-Cyber--anime-39FF14?style=flat&logo=github)](https://github.com/jrv30891940/Cyber-anime)
-[![Telegram](https://img.shields.io/badge/Telegram-Canal-2196f3?style=flat&logo=telegram)](https://t.me/+12lcsA9GxSUwZDUx)
+[![Telegram](https://img.shields.io/badge/Telegram-Únete-2196f3?style=flat&logo=telegram)](https://t.me/+12lcsA9GxSUwZDUx)
+[![GitHub](https://img.shields.io/badge/GitHub-Código-39FF14?style=flat&logo=github)](https://github.com/jrv30891940/Cyber-anime)
 
 ---
 
 ## ¿Qué es?
 
-**CYBER//ANIME** es una base de datos personal de anime que funciona directamente desde el navegador. Conecta con MyAnimeList en tiempo real para darte información de cualquier anime que busques. Todo lo que guardas — tu lista, calificaciones y notas — queda en tu propio dispositivo. Nada sale a ningún servidor externo.
+**CYBER//ANIME** es una base de datos personal de anime que funciona directamente desde el navegador. Conecta con MyAnimeList en tiempo real para darte información actualizada de cualquier anime. Todo lo que guardas — lista, calificaciones y notas — queda únicamente en tu dispositivo.
 
 ---
 
 ## Funciones
 
 ### 🔍 Buscador
-Escribe el nombre de cualquier anime y aparece al instante ordenado por relevancia. También tienes el botón **⚡ SORPRÉNDEME** que elige un anime aleatorio para cuando no sabes qué ver.
+Escribe el nombre de cualquier anime. Los resultados aparecen ordenados por relevancia — el que más coincide sale primero. El botón **⚡ SORPRÉNDEME** elige un anime completamente al azar.
 
 ### 🏆 Top Temporada
-Los 24 animes más populares de la temporada que está al aire ahora mismo, actualizados automáticamente cada temporada (Invierno · Primavera · Verano · Otoño).
+Los 24 animes más populares de la temporada actual, actualizados automáticamente cada temporada: Invierno · Primavera · Verano · Otoño.
 
 ### 📅 Calendario Semanal
-Qué animes se emiten cada día de la semana con el horario de Japón convertido automáticamente a tu zona horaria local.
+Animes en emisión por día con el horario de Japón convertido automáticamente a tu zona horaria local.
 
 ### 📋 Mi Lista
-Tu colección personal con tres estados:
+Tu colección personal en tres estados:
 - **Por ver** — pendiente
-- **Viendo** — con conteo de episodios, barra de progreso y fecha de inicio
-- **Terminado** — con calificación de 1 a 10 estrellas, fechas y notas personales
+- **Viendo** — conteo de episodios con barra de progreso y fecha de inicio
+- **Terminado** — calificación de 1–10 estrellas, fechas y notas personales
 
-Incluye filtros por género, buscador dentro de la lista, selección múltiple para eliminar varios a la vez y sistema de respaldo en JSON.
+Incluye filtro por género, buscador interno, **selección múltiple** para eliminar varios a la vez y respaldo en JSON.
 
 ### 📊 Estadísticas
-Resumen siempre visible: total de animes, terminados, horas vistas y tu calificación promedio.
+Total de animes, terminados, horas vistas y calificación promedio — siempre visibles.
 
 ### 🃏 Generador de Cartas
 Convierte cualquier anime de tu lista en una imagen estilo carta coleccionable con portada, géneros, sinopsis y tu puntuación. Descarga varias a la vez.
 
+### 🎨 Temas de Color
+8 temas disponibles desde el botón 🎨 en la esquina inferior derecha:
+Verde Neón · Cian · Rosa · Fuego · Violeta · Azul · Dorado · Rojo
+
 ### 🎄 CYBER//ANIME WRAPPED
-Del 25 al 31 de diciembre aparece un resumen animado de tu año estilo Spotify Wrapped: animes completados, horas invertidas, tu personalidad otaku, tu top 3 y más. Se puede guardar como imagen.
+Del 25 al 31 de diciembre: resumen animado de tu año estilo Spotify Wrapped con animes completados, horas invertidas, personalidad otaku, top 3 y más. Descargable como imagen.
+
+---
+
+## Novedades — v2.1
+
+- 🎨 **Sistema de temas** — 8 colores de acento, se guardan automáticamente
+- 🎬 **Nueva animación de inicio** — pantalla de boot rediseñada desde cero, dura 2 segundos
+- ◈ **Acerca de** — explicación completa de cada función y política de privacidad
+- ✈ **Canal de Telegram** — actualizaciones y novedades de la app
+- 🔍 **Buscador mejorado** — resultados ordenados por relevancia
+- ☑ **Selección múltiple** — elimina varios animes de tu lista de una vez
+- 🃏 **Generador de cartas** — crea imágenes coleccionables de tus animes
 
 ---
 
@@ -48,27 +64,27 @@ Del 25 al 31 de diciembre aparece un resumen animado de tu año estilo Spotify W
 
 🔒 **No recopilamos ningún dato tuyo.**
 
-Todo queda guardado en tu dispositivo usando `localStorage`. No hay servidores propios, no hay base de datos, no hay cookies de seguimiento, no hay publicidad. Los datos de anime provienen de [Jikan API](https://jikan.moe), un servicio público gratuito de MyAnimeList.
+Todo queda en tu dispositivo con `localStorage`. Sin servidores propios, sin base de datos, sin cookies de seguimiento, sin publicidad. Los datos de anime vienen de [Jikan API](https://jikan.moe), servicio público gratuito de MyAnimeList.
 
 ---
 
 ## Cómo usar
 
-Descarga los 3 archivos y colócalos en la misma carpeta:
+Descarga los 3 archivos en la misma carpeta:
 
 ```
-📁 CYBER//ANIME/
+📁 cyber-anime/
    ├── index.html
    ├── styles.css
    └── script.js
 ```
 
-Abre `index.html` en tu navegador. No necesita servidor ni instalación.
+Abre `index.html` en tu navegador. Sin instalación ni servidor.
 
 ### GitHub Pages
-1. Ve a **Settings → Pages**
-2. Selecciona `main` y carpeta `/ (root)`
-3. En unos segundos tendrás tu URL pública
+1. **Settings → Pages**
+2. Source: `main` / `/ (root)`
+3. Guarda — URL pública lista en segundos
 
 ---
 
@@ -76,17 +92,17 @@ Abre `index.html` en tu navegador. No necesita servidor ni instalación.
 
 | | |
 |---|---|
-| HTML5 + CSS3 + JavaScript | Sin frameworks ni dependencias |
-| [Jikan API v4](https://jikan.moe) | Datos de anime en tiempo real |
+| HTML5 · CSS3 · JavaScript | Sin frameworks ni dependencias |
+| [Jikan API v4](https://jikan.moe) | Datos en tiempo real de MyAnimeList |
 | Google Fonts | Orbitron + Share Tech Mono |
-| localStorage | Persistencia local sin backend |
+| localStorage | Todo guardado localmente |
 
 ---
 
 ## Comunidad
 
-- 📢 **Telegram** — Actualizaciones y novedades: [t.me/+12lcsA9GxSUwZDUx](https://t.me/+12lcsA9GxSUwZDUx)
-- ⌥ **GitHub** — Código fuente: [github.com/jrv30891940/Cyber-anime](https://github.com/jrv30891940/Cyber-anime)
+- 📢 **Telegram** — [t.me/+12lcsA9GxSUwZDUx](https://t.me/+12lcsA9GxSUwZDUx)
+- ⌥ **GitHub** — [github.com/jrv30891940/Cyber-anime](https://github.com/jrv30891940/Cyber-anime)
 
 ---
 
