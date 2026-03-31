@@ -389,7 +389,7 @@ async function cargarTrailer() {
   if (!animeActual) return;
   const cont = document.getElementById('mTrailer');
 
-  // Mostrar cargando mientras busca
+  // Mostrar animación de cargando (opcional)
   cont.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:center;
       height:120px;gap:10px;color:var(--g);font-size:.7rem;letter-spacing:2px">
@@ -399,54 +399,14 @@ async function cargarTrailer() {
       BUSCANDO TRÁILER...
     </div>`;
 
+  // Mostrar trailer si hay ID de YouTube en Jikan
   if (animeActual.trailerId) {
-    // Jikan tiene el ID — YouTube directo, no necesita buscar
     mostrarIframeYT(animeActual.trailerId, '▶ Tráiler oficial · YouTube');
     return;
   }
 
-  // Sin ID en Jikan — intentar con varios servidores Piped en orden
-  // Si uno falla o pide bot check, se prueba el siguiente automáticamente
-  const PIPED_SERVERS = [
-    'https://pipedapi.adminforge.de',
-    'https://pipedapi.r4fo.com',
-    'https://pipedapi.darkness.services',
-    'https://api.piped.yt',
-  ];
-
-  const query = `${animeActual.title} trailer oficial`;
-  let ytId = null;
-
-  for (const server of PIPED_SERVERS) {
-    try {
-      const res = await fetch(
-        `${server}/search?q=${encodeURIComponent(query)}&filter=videos`,
-        { signal: AbortSignal.timeout(5000) }  // 5s por servidor
-      );
-      if (!res.ok) continue;  // Si da error HTTP, probar el siguiente
-
-      const json  = await res.json();
-      const items = json.items || [];
-      const video = items.find(x => x.type === 'stream' || x.url?.startsWith('/watch'));
-
-      if (video) {
-        const m = (video.url || '').match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-        if (m) { ytId = m[1]; break; }  // Encontrado — salir del loop
-      }
-    } catch(_) {
-      continue;  // Servidor no disponible, probar el siguiente
-    }
-  }
-
-  // Si algún servidor encontró el ID — reproducir en iframe
-  if (ytId) {
-    mostrarIframeYT(ytId, `🔍 "${animeActual.title} trailer"`);
-    trailerOk = true;
-    return;
-  }
-
-  // Todos los servidores fallaron — botón de YouTube como último recurso
-  const q = encodeURIComponent(query);
+  // Si NO hay trailerId, mostrar solo botón de búsqueda
+  const query = encodeURIComponent(animeActual.title + " trailer oficial");
   cont.innerHTML = `
     <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;
       padding:28px 20px;text-align:center">
@@ -454,10 +414,10 @@ async function cargarTrailer() {
       <div style="font-family:var(--ft);font-size:.65rem;color:var(--b);
         letter-spacing:2px;margin-bottom:8px">${animeActual.title}</div>
       <div style="font-size:.65rem;color:var(--g);margin-bottom:18px;line-height:1.7">
-        No se encontró el tráiler automáticamente.<br>
+        No se encontró el tráiler automático.<br>
         Búscalo en YouTube:
       </div>
-      <a href="https://www.youtube.com/results?search_query=${q}"
+      <a href="https://www.youtube.com/results?search_query=${query}"
         target="_blank" style="display:inline-block;background:transparent;
         border:1px solid var(--v);color:var(--v);font-family:var(--ft);
         font-size:.6rem;letter-spacing:2px;padding:10px 20px;border-radius:4px;
@@ -465,7 +425,6 @@ async function cargarTrailer() {
         ▶ BUSCAR EN YOUTUBE →
       </a>
     </div>`;
-  trailerOk = true;
 }
 
 // Construye e inserta el iframe de YouTube con el ID dado
